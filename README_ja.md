@@ -2,32 +2,46 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [技術アーキテクチャ →](GUIDE_ja.md) · [利用ガイド →](USAGE_ja.md) · [実用 Skills →](skills/)
+> Agent 開発者が [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) を理解・実行・拡張し、独自 Agent を構築するための多言語ガイドです。
 
-> [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) の理解、拡張、プラグイン開発を支援するコミュニティ運営の多言語ガイドです。
-
-DeepSeek Harness（`dsh`）は、DeepSeek AI が公開したオープンソースのエージェントハーネスです。中心となる考え方は **「すべてがプラグイン」**。モデルアダプター、ツール、エージェントループ、セッション保存、権限、サンドボックス、テレメトリー、UI を設定によって構成・交換できます。
+DeepSeek Harness（`dsh`）は DeepSeek AI が公開した **Agent Runtime と構成フレームワーク**です。モデル、Prompt、ツール、権限、サンドボックス、Session、Subagent、テレメトリー、UI を動作する Agent にまとめ、共通のプラグイン方式で交換可能にします。
 
 > [!IMPORTANT]
-> 本リポジトリは独立したコミュニティガイドであり、DeepSeek の公式リポジトリではありません。DeepSeek Harness は開発者プレビュー中で、破壊的変更が入る可能性があります。実装の詳細は[公式リポジトリ](https://github.com/deepseek-ai/deepseek-harness)と[公式ドキュメント](https://deepseek-harness.github.io/deepseek-harness/)で確認してください。
+> DSH は開発者プレビュー中で、互換性を壊す変更があり得ます。使用するコミットを固定し、[公式リポジトリ](https://github.com/deepseek-ai/deepseek-harness)を基準にしてください。本ガイドは独立したコミュニティプロジェクトです。
 
-## Harness が担うもの
+## 入口
 
-モデル単体では、リポジトリの読み取り、コマンド実行、ツール呼び出し、承認要求、セッション保存、障害復旧は行えません。Harness はこの実行環境を提供し、ユーザー、モデル、ツール、アプリケーション状態を結ぶループを制御します。
+| 目的 | ガイド |
+|---|---|
+| アーキテクチャを理解する | [技術ガイド](GUIDE_ja.md) |
+| 導入・運用・トラブルシュート | [利用ガイド](USAGE_ja.md) |
+| DSH 上で Agent を開発する | [Agent 開発手順](#dsh-で-agent-を開発する) |
+| Coding Agent に開発を支援させる | [実用 Skills](skills/) |
 
-DeepSeek Harness は [Cordis](https://github.com/cordiverse/cordis) を基盤にしています。プラグインは共有 Context に Service、型付き Event、可逆 Effect を追加します。これにより、アプリ全体をフォークせずにモデル、ツール、サンドボックス、ストレージ、サブエージェントを差し替えられます。
+## DeepSeek Harness とは
 
-## 主要な概念
+モデル単体では、Workspace 管理、安全なツール実行、Session 保存、承認、キャンセル、Subagent、UI を処理できません。Agent Harness がこの実行層を提供します。DSH はすぐ使える Web Agent であると同時に、コーディング、調査、運用、業務 Agent を組み立てるフレームワークです。
 
-| 概念 | 説明 |
-| --- | --- |
-| Plugin | Cordis Context にマウントされる TypeScript モジュール、オブジェクト、サービスクラス。 |
-| Bundle | `dsh.bundle` を通して設定レイヤーを配布する npm パッケージ。 |
-| Profile | Bundle とローカル依存をまとめた実行可能な構成。 |
-| Patch | 設定行を追加・置換する YAML オーバーレイ。 |
-| Service / Event | 交換可能な能力と、エージェント処理を観測・介入する拡張点。 |
+中心思想は **Everything is a Plugin**。モデル Provider、ツール、Agent Loop、Session、ポリシー、サンドボックス、ストレージ、UI が Cordis の同じ構成モデルを使います。
 
-エージェントループ自体も交換可能です。既定のループは、プロンプトとツールスキーマを組み立て、モデル応答をストリーミングし、ツールを実行し、セッションイベントを記録します。
+## アーキテクチャ
+
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> G["Cordis plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session events"]
+    S --> A
+    S --> U["Host API + Client UI"]
+```
+
+- Context、Service、Fiber、Effect、Event、Loader が可視性、依存関係、ライフサイクルを管理します。
+- Bundle は設定を配布し、Profile は実行環境を構成し、Patch は環境差分を上書きします。
+- Agent Loop はコンテキストを組み立て、モデルとツールを呼び、完了を判断します。
+- Session Event は再生可能な永続的事実で、UI はその投影です。
+- Host は高権限の Runtime、Client は表示を担当します。
 
 ## クイックスタート
 
@@ -35,24 +49,34 @@ DeepSeek Harness は [Cordis](https://github.com/cordiverse/cordis) を基盤に
 npx @deepseek-ai/dsh web
 ```
 
-Web UI は既定で `http://127.0.0.1:3080` に起動します。**Settings → Models** でモデル認証情報を追加し、ワークスペースを選択してください。
+`http://127.0.0.1:3080` を開き、**Settings → Models** でモデルを設定して Workspace を選びます。プラグイン調査の前に構成を確認します。
 
-## このガイドで扱う内容
+```bash
+dsh --profile web --dump-config
+```
 
-- Cordis、プラグインのライフサイクル、依存性注入、可逆 Effect。
-- ツール、モデル、サンドボックス、ストレージ、サブエージェント、Web UI の拡張。
-- Bundle、Profile、`cordis.patch.yml`、テスト、公開、安全性。
-- 利用できる Agent Skills：`dsh-repository-explorer`、`dsh-plugin-scaffold`、`dsh-tool-builder`、`dsh-plugin-review`。
+## DSH で Agent を開発する
 
-ここでの **Skill** は AI コーディングエージェント向けの再利用可能な手順で、DeepSeek Harness の実行時 **Plugin** とは別物です。上記 Skills は [`skills/`](skills/) にあります。
+1. タスク範囲、副作用、完了条件、予算、キャンセル、承認点を定義します。
+2. Profile を選び、Bundle で能力を追加し、環境差分を Patch に置きます。
+3. モデル、Prompt、Memory、Compaction、ツール可視性を設計します。
+4. Tool、Service、Provider、Policy、Workflow を小さなプラグインに分けます。
+5. 既存 Agent Loop を優先し、計画や完了の意味が異なる場合だけ置換します。
+6. モデルや UI が後で参照する結果を Session Event に保存します。
+7. Runtime は Host、Web 表示は Client に置き、型付き API で接続します。
+8. 使い捨て Profile で mount、deny、timeout、unload、restart、rollback を検証します。
 
-## 公式リソース
+Tool はモデルが呼ぶ Runtime 能力です。Agent Skill は Coding Agent を案内する手順であり、同じものではありません。
 
-- [ソースコード](https://github.com/deepseek-ai/deepseek-harness)
-- [アーキテクチャ](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [最初のプラグインチュートリアル](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [パッケージ化とインストール](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+## プロジェクト資料
 
-## ライセンス
+- [技術ガイド](GUIDE_ja.md)：Cordis、ライフサイクル、Session、キャッシュ、安全境界。
+- [利用ガイド](USAGE_ja.md)：導入、モジュール分類、プラグイン開発、障害対応、公開確認。
+- [実用 Skills](skills/)：ソース探索、プラグイン作成、ツール開発、セキュリティレビュー。
+- 詳細は [English](README.md) または [简体中文](README_zh.md) の完全版を参照してください。
 
-[MIT](LICENSE)
+## セキュリティと互換性
+
+DSH とプラグインのコミットを固定し、インストールスクリプト、ファイル、ネットワーク、子プロセス、データ保持を確認してください。Dependency Injection、Policy、ユーザー承認、OS Sandbox は別の境界です。実際の認証情報、非公開 Session、スクリーンショット、QR コード、連絡先を文書に含めません。
+
+[MIT License](LICENSE)

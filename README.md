@@ -2,78 +2,135 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Technical architecture →](GUIDE.md) · [Usage handbook →](USAGE.md) · [Reusable Skills →](skills/)
+> A multilingual, developer-oriented guide to understanding, running, extending, and building agents with [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
-> A community-maintained, multilingual guide to understanding, extending, and building plugins for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
+DeepSeek Harness (`dsh`) is an open-source **agent runtime and composition framework** from DeepSeek AI. It connects models, prompts, tools, permissions, sandboxes, sessions, subagents, telemetry, and user interfaces into a working agent—and makes those parts replaceable through a shared plugin architecture.
 
-DeepSeek Harness (`dsh`) is an open-source agent harness developed by DeepSeek AI. Its central idea is unusually strong: **everything is a plugin**. Model adapters, tools, the agent loop, session storage, permissions, sandboxing, telemetry, and user interfaces can all be composed or replaced through configuration.
-
-This repository turns that architecture into practical explanations, plugin recipes, reusable development workflows, and a curated path from “what is a harness?” to publishing a production-ready `dsh` plugin.
+This repository explains that system in practical terms. It is an independent community guide, not an official DeepSeek project.
 
 > [!IMPORTANT]
-> This is an independent community guide, not an official DeepSeek repository. DeepSeek Harness is currently in developer preview and may introduce breaking changes. Always verify implementation details against the [official repository](https://github.com/deepseek-ai/deepseek-harness) and [official documentation](https://deepseek-harness.github.io/deepseek-harness/).
+> DeepSeek Harness is in developer preview and explicitly allows compatibility-breaking changes. Pin the DSH revision used by your project and verify commands and APIs against the [official repository](https://github.com/deepseek-ai/deepseek-harness).
 
-## Why this guide exists
+## Start here
 
-An AI model alone does not read a repository, run commands, call tools, request approval, preserve a session, or recover from failure. The **harness** supplies that operating environment and coordinates the loop between the user, the model, tools, and application state.
+| I want to… | Read this |
+|---|---|
+| Understand what DSH is | [What is DeepSeek Harness?](#what-is-deepseek-harness) |
+| Understand the architecture | [Architecture](#architecture) and the [technical guide](GUIDE.md) |
+| Run the Web UI or SDK | [Quick start](#quick-start) and the [usage handbook](USAGE.md) |
+| Build an agent on DSH | [Develop an agent with DSH](#develop-an-agent-with-dsh) |
+| Build or package a plugin | [Extension model](#choose-the-right-extension) and the [official plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md) |
+| Let a coding agent help with DSH | [Reusable Agent Skills](#reusable-agent-skills) |
+| Review a third-party plugin | [Security and compatibility](#security-and-compatibility) |
 
-DeepSeek Harness is interesting because it does not treat extensibility as a thin add-on layer. Its own built-in behavior is assembled from the same plugin mechanism available to developers. This gives teams a path to:
+## Contents
 
-- replace a model provider, tool implementation, sandbox, storage layer, or subagent provider without forking the whole application;
-- build focused coding, research, operations, or domain agents from reusable components;
-- distribute configuration and plugins as versioned bundles;
-- override deployments through profiles and patch layers;
-- unload or hot-replace plugins while their registered effects are cleaned up.
+- [What is DeepSeek Harness?](#what-is-deepseek-harness)
+- [Architecture](#architecture)
+- [Quick start](#quick-start)
+- [Develop an agent with DSH](#develop-an-agent-with-dsh)
+- [Choose the right extension](#choose-the-right-extension)
+- [Documentation map](#documentation-map)
+- [Reusable Agent Skills](#reusable-agent-skills)
+- [Security and compatibility](#security-and-compatibility)
 
-## DeepSeek Harness in one minute
+## What is DeepSeek Harness?
 
-### 1. Cordis is the composition layer
+A model can generate text or tool calls, but it does not by itself manage a workspace, execute tools safely, preserve a session, request approval, recover from cancellation, coordinate subagents, or expose a user interface. An **agent harness** supplies that operating layer.
 
-DeepSeek Harness is powered by [Cordis](https://github.com/cordiverse/cordis), a meta-framework for spatiotemporal composability. Plugins contribute services, typed events, and reversible effects to a shared context. Dependencies are declared rather than manually ordered, and registrations can be unwound when a plugin is removed.
+DSH is useful in two related roles:
 
-### 2. A running harness is a plugin tree
+1. **A ready-to-run agent application** — start the official Web UI, configure a model, select a workspace, and run agent sessions.
+2. **A framework for assembling agent products** — replace or add model providers, tools, Agent Loops, storage, sandboxes, policies, surfaces, and workflows without maintaining a full runtime fork.
 
-A `dsh` process starts from a **profile**, stacks one or more **bundles**, then applies user and command-line patch layers. The built-in `web` and `headless` experiences are compositions, not special hard-coded cores.
+Its defining idea is **Everything is a Plugin**. Built-in capabilities and third-party extensions use the same composition mechanism, powered by [Cordis](https://github.com/cordiverse/cordis). This makes DSH closer to a configurable agent runtime than to a single fixed coding assistant.
 
-| Concept | Meaning |
-| --- | --- |
-| Plugin | A TypeScript module, object, or service class mounted into a Cordis context. |
-| Bundle | An npm package that contributes a configuration layer through `dsh.bundle`. |
-| Profile | A runnable composition that lists bundles and stores local plugin dependencies. |
-| Patch | A YAML overlay that inserts or replaces configuration rows. Later layers win. |
-| Service | A typed capability provided by one plugin and consumed by others. |
-| Event | A durable fact or live extension point used to observe or intercept the agent flow. |
+### What this project adds
 
-### 3. The agent loop is replaceable too
+The official project provides the implementation and reference contracts. This guide adds:
 
-The default flow builds prompts and tool schemas, streams a model response, executes tool calls through a guarded pipeline, records durable session events, and continues until no further work is owed. The loop, model adapter, tool registry, and session log are all plugin-provided seams.
+- a stable mental model for the fast-moving source tree;
+- multilingual architecture and operating documentation;
+- decision paths for Agent, tool, provider, session, and UI development;
+- security and lifecycle review checklists;
+- reusable Skills that help coding agents explore, scaffold, build, and review DSH extensions.
 
-### 4. Host and client are separate faces
+## Architecture
 
-The official monorepo separates Node.js host packages from browser client packages. Host services can expose generated remote APIs to the Web UI, while client plugins can add interface behavior. This matters when choosing whether a plugin belongs in the runtime, the browser, or both.
+DSH has two cooperating structures:
 
-## What this project will cover
+- the **runtime plugin graph** defines which capabilities are available, where they are visible, and who owns their lifecycle;
+- the **Session event stream** preserves the durable facts needed to reconstruct model-visible history and interface state.
 
-- **Getting started** — install and run the Web UI, configure a model, select a workspace, and understand permissions.
-- **Architecture** — Cordis contexts, reversible effects, services, events, scopes, session logs, and the turn/step lifecycle.
-- **Plugin fundamentals** — `apply(ctx)`, dependency injection, configuration schemas, cleanup, and hot replacement.
-- **Tool plugins** — typed inputs, canonical outputs, model-facing rendering, policy hooks, and guarded execution.
-- **Capability providers** — model adapters, filesystems, subprocesses, sandboxes, storage, telemetry, and subagents.
-- **Web extensions** — host/client boundaries, remote APIs, UI contributions, and build order.
-- **Packaging** — bundles, profiles, `cordis.patch.yml`, npm/Git installation, versioning, and publishing.
-- **Quality and security** — tests, permission boundaries, secrets, install scripts, dependency review, and release checks.
+The Agent Loop connects them by reading model, prompt, tool, policy, and storage capabilities from the graph, executing work, and writing results back to the Session.
 
-## Quick start with the official project
+```mermaid
+flowchart LR
+    C["Profile + Bundles + Patches"] --> L["Cordis Loader"]
+    L --> G["Runtime plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model providers"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session event stream"]
+    S --> A
+    S --> H["Host APIs"]
+    H --> U["Web / desktop / TUI / other clients"]
+```
 
-Requirements: a supported Node.js release and a DeepSeek API key (or another configured model endpoint).
+### Runtime composition
+
+| Concept | Responsibility |
+|---|---|
+| **Plugin** | A TypeScript function, object, or service class mounted into a Cordis Context. |
+| **Context** | Controls capability visibility and resource ownership. |
+| **Service** | A typed capability provided by one plugin and consumed by others through `inject`. |
+| **Fiber** | One live plugin mount with its own lifecycle. |
+| **Effect** | A resource registration with cleanup when its owning Fiber unloads. |
+| **Event** | A typed observation or interception point between plugins. |
+| **Loader** | Reconciles ordered configuration into the live plugin graph. |
+
+### Deployment composition
+
+| Concept | Responsibility |
+|---|---|
+| **Bundle** | An npm package that contributes a configuration layer through `dsh.bundle`. |
+| **Profile** | A named runnable composition containing ordered Bundles and local dependencies. |
+| **Patch** | A late YAML overlay that inserts or replaces configuration rows. |
+| **Preset** | Session-level Agent behavior; it is not another process-level Profile. |
+
+### Agent execution
+
+A typical turn follows this path:
+
+1. reconstruct model-visible context from durable Session events;
+2. assemble the system prompt, tool schemas, model route, and policy state;
+3. stream a model response;
+4. validate, authorize, approve, and execute requested tools;
+5. persist canonical results as Session events;
+6. continue until the Agent Loop's completion condition is met;
+7. project the same event state to Web or other clients.
+
+For Context, Service, Fiber, Effect, Event, Session, Turn/Step, caching, and security boundaries, read the [technical architecture guide](GUIDE.md).
+
+## Quick start
+
+### Run the official Web UI
+
+Install Node.js 22.19 or a 24+ release (and re-check the [official development guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.md) before deployment), then run:
 
 ```bash
 npx @deepseek-ai/dsh web
 ```
 
-The Web UI is served at `http://127.0.0.1:3080` by default. In **Settings → Models**, add a model credential, then choose a workspace and start a session.
+Open `http://127.0.0.1:3080`, configure a model service in **Settings → Models**, select a workspace, and begin with a non-destructive task.
 
-To explore the source:
+Inspect the effective plugin tree before debugging extensions:
+
+```bash
+dsh --profile web --dump-config
+```
+
+### Run from source
 
 ```bash
 git clone https://github.com/deepseek-ai/deepseek-harness.git
@@ -83,108 +140,111 @@ pnpm run build
 pnpm dsh web
 ```
 
-See the official [Web UI guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/index.md) and [development guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.md) for current prerequisites and commands.
+Programmatic embedding is also available through the official Python SDK. See the [usage handbook](USAGE.md) for SDK setup, plugin installation, rollback, and troubleshooting.
 
-## The smallest possible plugin
+## Develop an agent with DSH
 
-```ts
-import type { Context } from '@deepseek-ai/cordis'
+Building an Agent usually means composing several DSH extension points, not writing one large plugin.
 
-export const name = 'hello-plugin'
+### 1. Define the Agent contract
 
-export function apply(ctx: Context) {
-  ctx.effect(() => {
-    console.log('[hello-plugin] loaded')
-    return () => console.log('[hello-plugin] unloaded')
-  })
-}
-```
+Write down the target user, task boundary, allowed side effects, required data, completion condition, budget, cancellation behavior, and human-approval points. This determines which runtime capabilities are actually needed.
 
-A local patch can mount the module:
+### 2. Choose the runtime composition
 
-```yaml
-- insert:
-    - id: hello
-      name: '/absolute/path/to/hello-plugin.ts'
-```
+Start from a Profile close to the target host, add versioned Bundles, and keep environment-specific changes in Patches. Use a disposable Profile while developing external plugins.
 
-Run it with:
+### 3. Configure the model and context
 
-```bash
-pnpm dsh web --patch ./cordis.patch.yml
-```
+Choose or implement the model provider, then define prompt assembly, workspace instructions, memory, compaction, and tool visibility. Keep stable prompt and tool-schema prefixes stable where possible so provider-side prefix caching remains useful.
 
-Real plugins should also declare consumed services through `inject`, expose configurable values with a Schemastery `Config` schema, and register tools or services through `ctx` so their effects follow the plugin lifecycle. Start with the official [first plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md).
+### 4. Add capabilities as focused plugins
 
-## Plugin ideas and extension points
+Create narrow providers and consumers:
 
-| Area | Example plugin | Primary seam |
-| --- | --- | --- |
-| Tools | Issue tracker, database query, deployment, code search | `ctx.tools` |
-| Models | OpenAI-compatible or private inference provider | `ctx.llm` |
-| Runtime | Remote filesystem, container sandbox, cloud subprocess | capability services |
-| Agent behavior | Planning, validation, routing, handoff, subagents | `agent/*` events and agent services |
-| Persistence | Team session store, audit archive, transcript exporter | session events and `ctx.sessions` |
-| UI | Domain-specific panels, settings, tool-result cards | client plugins and remote APIs |
-| Governance | Approval policy, redaction, telemetry, cost controls | policy and telemetry events |
+- tools for model-requested actions;
+- Services for reusable runtime capabilities;
+- Events for observation and interception;
+- model, filesystem, process, sandbox, storage, telemetry, or subagent providers when existing implementations do not fit.
 
-## Included agent Skills
+Declare consumed Services through `inject`, and register resources through lifecycle-aware `ctx` helpers.
 
-In this guide, a **Skill** means a reusable instruction workflow for AI coding agents; it is not the same thing as a DeepSeek Harness runtime plugin. The following Skills are available under [`skills/`](skills/):
+### 5. Shape the Agent Loop and policy
 
-| Skill | Intended use |
-| --- | --- |
-| `dsh-repository-explorer` | Map packages, plugin rows, services, events, and host/client ownership before making a change. |
-| `dsh-plugin-scaffold` | Create a minimal plugin, configuration schema, patch, tests, and package metadata. |
-| `dsh-tool-builder` | Build a typed tool with validation, rendering, policy hooks, and lifecycle-safe registration. |
-| `dsh-plugin-review` | Review dependency injection, effect cleanup, permissions, secrets, packaging, and compatibility risk. |
+Use the existing loop when only prompts, tools, or policies change. Replace or wrap the Agent Loop only when planning, routing, validation, handoff, retry, or completion semantics genuinely differ. Keep schema validation, authorization, user approval, and OS sandboxing as separate controls.
 
-Each Skill states when to use it, its ordered workflow, safety boundaries, completion checks, and links to the corresponding official contracts.
+### 6. Make state replayable
 
-## Recommended learning path
+If a fact is later visible to the model or UI, persist it as a canonical Session event. Treat UI state as a projection, not the source of truth. Test cancellation, partial tool failure, restart, compaction, and replay.
 
-1. Run `dsh web` and complete one normal repository task.
-2. Read the official [architecture guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md).
-3. Build the minimal plugin from the official tutorial.
-4. Add a typed tool and a configuration schema.
-5. Inspect the effective tree with `dsh --profile web --dump-config`.
-6. Package the plugin as a bundle and install it into a disposable profile.
-7. Add tests and review permissions before publishing.
+### 7. Add a surface only where needed
 
-## Authoritative resources
+Runtime behavior belongs in the Host. Browser presentation belongs in a Client plugin. Cross-boundary features should use a typed remote API instead of duplicating state in the UI.
 
-- [DeepSeek Harness source](https://github.com/deepseek-ai/deepseek-harness)
-- [DeepSeek Harness documentation](https://deepseek-harness.github.io/deepseek-harness/)
-- [Architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [Plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [Tool tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.md)
-- [Plugin packaging](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
-- [Cordis](https://github.com/cordiverse/cordis)
-- [Spatiotemporal composability paper](https://github.com/cordiverse/paper)
+### 8. Package and verify
 
-## Contributing
+Package distributable configuration as a Bundle, install it into a disposable Profile, inspect `--dump-config`, and test mount, normal use, denial, timeout, unload, remount, restart, removal, and rollback.
 
-Contributions are welcome: corrections, translations, examples, plugin case studies, and reusable Skills. Keep claims linked to official source or reproducible code, clearly label preview APIs, and never include real credentials in examples.
+## Choose the right extension
 
-- [Technical guide](GUIDE.md)
-- [Usage handbook](USAGE.md)
-- [Reusable Skills](skills/)
-- [Contribution guide](CONTRIBUTING.md)
-- [Project roadmap](ROADMAP.md)
+| Goal | Prefer | Avoid confusing it with |
+|---|---|---|
+| Add an action the model can request | Tool plugin | An Agent Skill |
+| Share a runtime capability | Service provider plugin | A global singleton outside lifecycle control |
+| Change planning or completion behavior | Prompt/policy plugin first; Agent Loop when necessary | A new Profile for every behavior |
+| Add a model or infrastructure backend | Provider plugin | Hard-coding it into the loop |
+| Preserve memory or audit state | Session/storage plugin and durable events | UI-only state |
+| Add a Web panel or result card | Client plugin plus typed Host API | Privileged browser code |
+| Ship configuration and plugins | Bundle | Profile |
+| Assemble an installable runtime | Profile | Runtime fork |
+| Connect an independent application | Client or protocol bridge | In-process plugin |
+| Guide a coding agent during development | Agent Skill | DSH runtime plugin |
 
-Current documentation layout:
+Common Agent product modules include workflow and planning, tools and integrations, context and memory, sessions and replay, subagents, model routing, browser and vision, policy and sandboxing, UI surfaces, and operations/telemetry. The [usage handbook](USAGE.md) provides a categorized module map and installation checklist.
 
-```text
-deepeseek-harness-guide/
-├── README*.md        # introductions and language entry points
-├── GUIDE*.md         # multilingual technical architecture guides
-├── USAGE*.md         # multilingual operations and module handbook
-├── skills/           # reusable coding-agent workflows for DSH work
-├── CONTRIBUTING*.md  # source, review, and translation policy
-├── ROADMAP*.md       # staged project evolution
-└── LICENSE
-```
+## Documentation map
 
-## License
+| Resource | Purpose |
+|---|---|
+| [Technical guide](GUIDE.md) | Architecture, lifecycle, Session model, caching, and security boundaries |
+| [Usage handbook](USAGE.md) | Installation, module selection, plugin/tool workflows, troubleshooting, and release checks |
+| [Reusable Skills](skills/) | Agent-readable workflows for DSH development |
+| [Contribution guide](CONTRIBUTING.md) | Sources, translations, review, and contribution rules |
+| [Roadmap](ROADMAP.md) | Planned examples, validation, compatibility metadata, and ecosystem work |
 
-[MIT](LICENSE)
+Every README, architecture guide, and usage handbook currently has 15 language entry points.
+
+## Reusable Agent Skills
+
+These repository-local Skills guide compatible coding agents through common DSH work. A Skill is an instruction workflow; it is **not** installed with `dsh plugin` and does not execute inside the DSH runtime.
+
+| Skill | Use it to… |
+|---|---|
+| [`dsh-repository-explorer`](skills/dsh-repository-explorer/) | Map Profiles, Bundles, Patches, packages, Services, Events, Sessions, and Host/Client ownership. |
+| [`dsh-plugin-scaffold`](skills/dsh-plugin-scaffold/) | Build a narrow lifecycle-safe plugin and optional packaging. |
+| [`dsh-tool-builder`](skills/dsh-tool-builder/) | Design a typed, policy-aware, bounded, and replayable tool. |
+| [`dsh-plugin-review`](skills/dsh-plugin-review/) | Audit compatibility, lifecycle, supply chain, permissions, secrets, and replay risk. |
+
+## Security and compatibility
+
+- Pin DSH and third-party plugin revisions; preview APIs are not stable contracts.
+- Inspect `dsh --profile <name> --dump-config` to verify the actual composition.
+- Review dependency install and `prepare` scripts before allowing them to run.
+- Treat same-process plugins, generated JavaScript, subprocesses, filesystem access, and network access as privileged behavior.
+- Do not describe `inject` as a sandbox. Dependency visibility, policy, approval, and OS isolation are separate boundaries.
+- Keep real credentials, private Sessions, screenshots, QR codes, and contact details out of examples and documentation.
+- Treat ecosystem inclusion as discovery, not a security endorsement.
+
+## Official and community sources
+
+- [DeepSeek Harness official repository](https://github.com/deepseek-ai/deepseek-harness)
+- [Official architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
+- [Official first-plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
+- [Official tool tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.md)
+- [Official packaging and installation guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+- [Cordis](https://github.com/cordiverse/cordis) and its [spatiotemporal composability paper](https://github.com/cordiverse/paper)
+- [Community ecosystem classification reference](https://github.com/libukai/awesome-deepseek-harness)
+
+## Contributing and license
+
+Corrections, translations, examples, revision-pinned case studies, and Skills are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md). This guide is available under the [MIT License](LICENSE).

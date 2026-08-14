@@ -2,32 +2,46 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Architecture technique →](GUIDE_fr.md) · [Manuel d'utilisation →](USAGE_fr.md) · [Skills pratiques →](skills/)
+> Guide multilingue pour comprendre, exécuter et étendre [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), puis développer ses propres agents avec ce framework.
 
-> Un guide communautaire multilingue pour comprendre, étendre et créer des plugins pour [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
-
-DeepSeek Harness (`dsh`) est un harness d'agents open source développé par DeepSeek AI. Son idée centrale est simple et puissante : **tout est un plugin**. Adaptateurs de modèles, outils, boucle de l'agent, sessions, permissions, bac à sable, télémétrie et interface peuvent être composés ou remplacés par configuration.
+DeepSeek Harness (`dsh`) est un **runtime et framework de composition d'agents** open source de DeepSeek AI. Il relie modèles, prompts, outils, permissions, sandbox, sessions, sous-agents, télémétrie et interfaces, et rend ces modules remplaçables via une architecture commune de plugins.
 
 > [!IMPORTANT]
-> Ce dépôt est un guide communautaire indépendant, et non un dépôt officiel de DeepSeek. DeepSeek Harness est en préversion développeur et peut introduire des changements incompatibles. Vérifiez les détails dans le [dépôt officiel](https://github.com/deepseek-ai/deepseek-harness) et la [documentation officielle](https://deepseek-harness.github.io/deepseek-harness/).
+> DSH est en préversion développeur et peut introduire des ruptures de compatibilité. Épinglez le commit utilisé et vérifiez le [dépôt officiel](https://github.com/deepseek-ai/deepseek-harness). Ce guide est un projet communautaire indépendant.
 
-## Pourquoi un harness ?
+## Par où commencer
 
-Un modèle seul ne lit pas un dépôt, n'exécute pas de commandes, n'appelle pas d'outils, ne demande pas d'autorisation et ne conserve pas une session. Le harness fournit cet environnement d'exécution et coordonne l'utilisateur, le modèle, les outils et l'état de l'application.
+| Objectif | Document |
+|---|---|
+| Comprendre l'architecture | [Guide technique](GUIDE_fr.md) |
+| Installer, utiliser et dépanner | [Manuel d'utilisation](USAGE_fr.md) |
+| Développer un agent sur DSH | [Parcours de développement](#développer-un-agent-avec-dsh) |
+| Utiliser un agent de programmation | [Skills pratiques](skills/) |
 
-DeepSeek Harness repose sur [Cordis](https://github.com/cordiverse/cordis). Les plugins ajoutent des services, des événements typés et des effets réversibles à un Context partagé. On peut ainsi remplacer modèle, outils, sandbox, stockage ou sous-agents sans maintenir un fork complet.
+## Qu'est-ce que DeepSeek Harness ?
 
-## Concepts essentiels
+Un modèle seul ne gère pas un workspace, n'exécute pas les outils de façon sûre, ne conserve pas une session, ne demande pas d'approbation et ne fournit pas d'UI. Un Agent Harness apporte cette couche d'exécution. DSH est à la fois un Web Agent prêt à l'emploi et un framework pour assembler des agents de code, recherche, opérations ou métier.
 
-| Concept | Signification |
-| --- | --- |
-| Plugin | Module TypeScript, objet ou classe de service monté dans un Context Cordis. |
-| Bundle | Paquet npm distribuant une couche de configuration via `dsh.bundle`. |
-| Profile | Composition exécutable de Bundles et de dépendances locales. |
-| Patch | Surcouche YAML qui insère ou remplace des lignes de configuration. |
-| Service / Event | Capacité remplaçable et point d'extension du flux de l'agent. |
+Son principe est **Everything is a Plugin**. Providers de modèles, outils, Agent Loop, Session, politiques, sandbox, stockage et UI utilisent le même modèle de composition Cordis.
 
-La boucle de l'agent est elle aussi remplaçable. La boucle par défaut assemble prompts et schémas d'outils, diffuse la réponse du modèle, exécute les outils et enregistre les événements persistants de session.
+## Architecture
+
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> G["Cordis plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session events"]
+    S --> A
+    S --> U["Host API + Client UI"]
+```
+
+- Context, Service, Fiber, Effect, Event et Loader gèrent visibilité, dépendances et cycle de vie.
+- Bundle distribue la configuration, Profile compose le runtime et Patch conserve les différences d'environnement.
+- Agent Loop prépare le contexte, appelle modèle et outils, puis décide de la fin.
+- Les Session Events sont la source durable et rejouable ; l'UI en est une projection.
+- Host porte les capacités privilégiées, Client l'affichage.
 
 ## Démarrage rapide
 
@@ -35,24 +49,34 @@ La boucle de l'agent est elle aussi remplaçable. La boucle par défaut assemble
 npx @deepseek-ai/dsh web
 ```
 
-L'interface Web est servie par défaut sur `http://127.0.0.1:3080`. Ajoutez les identifiants dans **Settings → Models**, puis choisissez un espace de travail.
+Ouvrez `http://127.0.0.1:3080`, configurez le modèle dans **Settings → Models** et choisissez un workspace. Avant de dépanner un plugin, inspectez la composition effective :
 
-## Contenu prévu
+```bash
+dsh --profile web --dump-config
+```
 
-- Cordis, cycle de vie des plugins, injection de dépendances et effets réversibles.
-- Plugins d'outils, modèles, sandbox, stockage, sous-agents et interface Web.
-- Bundles, Profiles, `cordis.patch.yml`, tests, publication et sécurité.
-- Agent Skills disponibles : `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` et `dsh-plugin-review`.
+## Développer un agent avec DSH
 
-Ici, un **Skill** est un workflow d'instructions réutilisable pour un agent de programmation ; ce n'est pas un **Plugin** d'exécution DeepSeek Harness. Ces Skills se trouvent dans [`skills/`](skills/).
+1. Définir tâche, effets autorisés, fin, budget, annulation et approbations.
+2. Choisir un Profile, ajouter les capacités par Bundles et isoler les différences dans des Patches.
+3. Concevoir modèle, Prompt, mémoire, compactage et visibilité des outils.
+4. Séparer Tools, Services, Providers, politiques et workflows en petits plugins.
+5. Réutiliser l'Agent Loop existant ; ne le remplacer que si planification ou terminaison diffère.
+6. Enregistrer comme Session Events les résultats que modèle ou UI devront reconstruire.
+7. Placer le runtime dans Host, l'affichage Web dans Client et les relier par une API typée.
+8. Tester montage, refus, délai, déchargement, redémarrage et retour arrière dans un Profile jetable.
 
-## Ressources officielles
+Un Tool est une capacité runtime appelée par le modèle. Un Agent Skill guide un agent de programmation et n'est pas un plugin du runtime DSH.
 
-- [Code source](https://github.com/deepseek-ai/deepseek-harness)
-- [Architecture](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [Premier plugin](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [Empaquetage et installation](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+## Documentation du projet
 
-## Licence
+- [Guide technique](GUIDE_fr.md) : Cordis, cycle de vie, Session, cache et sécurité.
+- [Manuel d'utilisation](USAGE_fr.md) : installation, modules, développement, dépannage et publication.
+- [Skills pratiques](skills/) : exploration, squelette de plugin, outils et audit de sécurité.
+- Versions complètes : [English](README.md) et [简体中文](README_zh.md).
 
-[MIT](LICENSE)
+## Sécurité et compatibilité
+
+Épinglez les commits DSH et plugins. Examinez scripts d'installation, fichiers, réseau, sous-processus et conservation. Injection de dépendances, politique, approbation et sandbox système sont des frontières distinctes. N'incluez pas de véritables secrets, sessions privées, captures, QR codes ou coordonnées dans la documentation.
+
+[MIT License](LICENSE)

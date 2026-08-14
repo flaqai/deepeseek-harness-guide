@@ -2,32 +2,46 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [สถาปัตยกรรมเชิงเทคนิค →](GUIDE_th.md) · [คู่มือการใช้งาน →](USAGE_th.md) · [Skills ที่ใช้งานได้ →](skills/)
+> คู่มือหลายภาษาสำหรับนักพัฒนาเพื่อทำความเข้าใจ เรียกใช้ และขยาย [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) รวมถึงสร้าง Agent ของตนเอง
 
-> คู่มือหลายภาษาที่ดูแลโดยชุมชนสำหรับทำความเข้าใจ ขยายความสามารถ และสร้างปลั๊กอินให้ [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
-
-DeepSeek Harness (`dsh`) คือ agent harness แบบโอเพนซอร์สที่พัฒนาโดย DeepSeek AI แนวคิดหลักคือ **ทุกอย่างเป็นปลั๊กอิน** ทั้งตัวเชื่อมต่อโมเดล เครื่องมือ วงจรของเอเจนต์ การเก็บเซสชัน สิทธิ์ แซนด์บ็อกซ์ เทเลเมทรี และส่วนติดต่อผู้ใช้ สามารถประกอบหรือแทนที่ผ่านการกำหนดค่าได้
+DeepSeek Harness (`dsh`) คือ **Agent Runtime และเฟรมเวิร์กสำหรับประกอบระบบ** แบบโอเพนซอร์สจาก DeepSeek AI โดยเชื่อมโมเดล prompt เครื่องมือ สิทธิ์ sandbox session subagent telemetry และ UI และทำให้แต่ละโมดูลเปลี่ยนได้ผ่านสถาปัตยกรรมปลั๊กอินเดียวกัน
 
 > [!IMPORTANT]
-> โปรเจกต์นี้เป็นคู่มือชุมชนอิสระ ไม่ใช่คลังอย่างเป็นทางการของ DeepSeek ขณะนี้ DeepSeek Harness ยังอยู่ในช่วง Developer Preview และอาจมีการเปลี่ยนแปลงที่ไม่เข้ากัน โปรดตรวจสอบกับ[คลังอย่างเป็นทางการ](https://github.com/deepseek-ai/deepseek-harness)และ[เอกสารอย่างเป็นทางการ](https://deepseek-harness.github.io/deepseek-harness/)เสมอ
+> DSH ยังอยู่ในช่วง Developer Preview และอาจมีการเปลี่ยนแปลงที่ไม่เข้ากัน ควรตรึง commit ที่ใช้และตรวจสอบกับ[คลังอย่างเป็นทางการ](https://github.com/deepseek-ai/deepseek-harness) คู่มือนี้เป็นโปรเจกต์ชุมชนอิสระ
 
-## ทำไมต้องมี Harness
+## เริ่มจากตรงนี้
 
-โมเดลเพียงอย่างเดียวไม่สามารถอ่านคลังโค้ด รันคำสั่ง เรียกเครื่องมือ ขออนุมัติ เก็บเซสชัน หรือกู้คืนจากข้อผิดพลาดได้ Harness จัดเตรียมสภาพแวดล้อมนี้และประสานผู้ใช้ โมเดล เครื่องมือ และสถานะของแอปพลิเคชัน
+| เป้าหมาย | เอกสาร |
+|---|---|
+| เข้าใจสถาปัตยกรรม | [คู่มือเชิงเทคนิค](GUIDE_th.md) |
+| ติดตั้ง ใช้งาน และแก้ปัญหา | [คู่มือการใช้งาน](USAGE_th.md) |
+| พัฒนา Agent บน DSH | [ขั้นตอนการพัฒนา](#พัฒนา-agent-ด้วย-dsh) |
+| ใช้ coding agent ช่วยทำงาน | [Skills ที่ใช้งานได้](skills/) |
 
-DeepSeek Harness สร้างบน [Cordis](https://github.com/cordiverse/cordis) ปลั๊กอินเพิ่ม Service, Event ที่มีชนิดข้อมูล และ Effect ที่ย้อนกลับได้ลงใน Context ร่วม จึงเปลี่ยนโมเดล เครื่องมือ แซนด์บ็อกซ์ พื้นที่จัดเก็บ หรือเอเจนต์ย่อยได้โดยไม่ต้อง fork ทั้งแอปพลิเคชัน
+## DeepSeek Harness คืออะไร
 
-## แนวคิดหลัก
+โมเดลเพียงอย่างเดียวไม่จัดการ workspace ไม่เรียกเครื่องมืออย่างปลอดภัย ไม่เก็บ Session ไม่ขออนุมัติ และไม่มี UI Agent Harness จึงทำหน้าที่เป็นชั้นปฏิบัติการ DSH เป็นทั้ง Web Agent ที่พร้อมใช้และเฟรมเวิร์กสำหรับประกอบ Agent ด้านการเขียนโค้ด วิจัย ปฏิบัติการ และงานเฉพาะด้าน
 
-| แนวคิด | ความหมาย |
-| --- | --- |
-| Plugin | โมดูล TypeScript อ็อบเจ็กต์ หรือคลาส Service ที่ติดตั้งใน Cordis Context |
-| Bundle | แพ็กเกจ npm ที่เผยแพร่ชั้นการกำหนดค่าผ่าน `dsh.bundle` |
-| Profile | ชุดประกอบที่รันได้จาก Bundles และ dependency ภายในเครื่อง |
-| Patch | ชั้น YAML ที่เพิ่มหรือแทนที่แถวการกำหนดค่า |
-| Service / Event | ความสามารถที่สับเปลี่ยนได้และจุดขยายในลำดับงานของเอเจนต์ |
+หลักสำคัญคือ **Everything is a Plugin** ทั้ง model provider เครื่องมือ Agent Loop, Session, policy, sandbox, storage และ UI ใช้โมเดลการประกอบของ Cordis แบบเดียวกัน
 
-แม้แต่ agent loop ก็แทนที่ได้ ลูปมาตรฐานจะประกอบ prompt และ schema ของเครื่องมือ สตรีมคำตอบจากโมเดล รันเครื่องมือ และบันทึก event ของเซสชัน
+## สถาปัตยกรรม
+
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> G["Cordis plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session events"]
+    S --> A
+    S --> U["Host API + Client UI"]
+```
+
+- Context, Service, Fiber, Effect, Event และ Loader จัดการการมองเห็น dependency และวงจรชีวิต
+- Bundle แจกจ่ายการตั้งค่า Profile ประกอบ runtime และ Patch เก็บความต่างของสภาพแวดล้อม
+- Agent Loop สร้าง context เรียกโมเดลและเครื่องมือ และตัดสินการเสร็จสิ้น
+- Session Event เป็นแหล่งข้อเท็จจริงถาวรที่ replay ได้ ส่วน UI เป็นภาพฉายของข้อมูลนี้
+- Host ดูแลความสามารถที่มีสิทธิ์สูง ส่วน Client ดูแลการแสดงผล
 
 ## เริ่มต้นอย่างรวดเร็ว
 
@@ -35,24 +49,34 @@ DeepSeek Harness สร้างบน [Cordis](https://github.com/cordiverse/co
 npx @deepseek-ai/dsh web
 ```
 
-Web UI เปิดที่ `http://127.0.0.1:3080` โดยค่าเริ่มต้น เพิ่มข้อมูลรับรองใน **Settings → Models** แล้วเลือก workspace
+เปิด `http://127.0.0.1:3080` ตั้งค่าโมเดลใน **Settings → Models** และเลือก workspace ก่อนตรวจสอบปลั๊กอินให้ดูองค์ประกอบจริง:
 
-## เนื้อหาของคู่มือ
+```bash
+dsh --profile web --dump-config
+```
 
-- Cordis, วงจรชีวิตปลั๊กอิน, dependency injection และ effect ที่ย้อนกลับได้
-- ปลั๊กอินสำหรับเครื่องมือ โมเดล แซนด์บ็อกซ์ พื้นที่จัดเก็บ เอเจนต์ย่อย และ Web UI
-- Bundles, Profiles, `cordis.patch.yml`, การทดสอบ การเผยแพร่ และความปลอดภัย
-- Agent Skills ที่มีให้ใช้: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` และ `dsh-plugin-review`
+## พัฒนา Agent ด้วย DSH
 
-**Skill** ในที่นี้หมายถึงขั้นตอนการทำงานที่ใช้ซ้ำได้สำหรับเอเจนต์เขียนโค้ด ไม่ใช่ **Plugin** ที่ทำงานใน DeepSeek Harness โดย Skills อยู่ใน [`skills/`](skills/)
+1. กำหนดงาน ผลข้างเคียงที่อนุญาต เงื่อนไขเสร็จ งบประมาณ การยกเลิก และการอนุมัติ
+2. เลือก Profile เพิ่มความสามารถผ่าน Bundle และเก็บความต่างใน Patch
+3. ออกแบบโมเดล Prompt หน่วยความจำ การย่อ และการมองเห็นเครื่องมือ
+4. แยก Tool, Service, Provider, policy และ workflow เป็นปลั๊กอินขนาดเล็ก
+5. ใช้ Agent Loop เดิมก่อน และเปลี่ยนเมื่อการวางแผนหรือการเสร็จสิ้นต่างจริง ๆ
+6. เก็บผลที่โมเดลหรือ UI ต้องสร้างใหม่เป็น Session Event
+7. วาง runtime ใน Host วาง Web UI ใน Client และเชื่อมด้วย API ที่มี type
+8. ทดสอบ mount การปฏิเสธ timeout, unload, restart และ rollback ใน Profile ชั่วคราว
 
-## แหล่งข้อมูลอย่างเป็นทางการ
+Tool คือความสามารถ runtime ที่โมเดลเรียก ส่วน Agent Skill คือขั้นตอนสำหรับ coding agent และไม่ใช่ปลั๊กอิน DSH Runtime
 
-- [ซอร์สโค้ด](https://github.com/deepseek-ai/deepseek-harness)
-- [สถาปัตยกรรม](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [ปลั๊กอินแรก](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [การแพ็กและติดตั้ง](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+## เอกสารของโปรเจกต์
 
-## สัญญาอนุญาต
+- [คู่มือเชิงเทคนิค](GUIDE_th.md): Cordis วงจรชีวิต Session cache และขอบเขตความปลอดภัย
+- [คู่มือการใช้งาน](USAGE_th.md): การติดตั้ง โมดูล ปลั๊กอิน การแก้ปัญหา และการเผยแพร่
+- [Skills ที่ใช้งานได้](skills/): สำรวจ source สร้างปลั๊กอิน พัฒนาเครื่องมือ และตรวจสอบความปลอดภัย
+- ฉบับเต็ม: [English](README.md) และ [简体中文](README_zh.md)
 
-[MIT](LICENSE)
+## ความปลอดภัยและความเข้ากันได้
+
+ตรึง commit ของ DSH และปลั๊กอิน ตรวจสอบสคริปต์ติดตั้ง ไฟล์ เครือข่าย subprocess และการเก็บข้อมูล Dependency injection, policy, การอนุมัติ และ OS sandbox เป็นขอบเขตแยกกัน เอกสารไม่ควรมี credential จริง Session ส่วนตัว ภาพหน้าจอ QR code หรือข้อมูลติดต่อ
+
+[MIT License](LICENSE)

@@ -2,32 +2,46 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Technische Architektur →](GUIDE_de.md) · [Bedienungsanleitung →](USAGE_de.md) · [Praktische Skills →](skills/)
+> Ein mehrsprachiger Leitfaden für Agent-Entwickler, die [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) verstehen, ausführen, erweitern und eigene Agents damit bauen möchten.
 
-> Ein mehrsprachiger Community-Leitfaden zum Verstehen und Erweitern von [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) sowie zur Entwicklung eigener Plugins.
-
-DeepSeek Harness (`dsh`) ist ein von DeepSeek AI entwickeltes Open-Source-Agent-Harness. Die zentrale Idee lautet: **Alles ist ein Plugin**. Modelladapter, Werkzeuge, Agentenschleife, Sitzungsspeicher, Berechtigungen, Sandbox, Telemetrie und Benutzeroberfläche können per Konfiguration zusammengesetzt oder ersetzt werden.
+DeepSeek Harness (`dsh`) ist ein quelloffenes **Agent Runtime- und Kompositionsframework** von DeepSeek AI. Es verbindet Modelle, Prompts, Tools, Berechtigungen, Sandboxes, Sessions, Subagenten, Telemetrie und Oberflächen zu einem lauffähigen Agent und macht diese Module über eine gemeinsame Plugin-Architektur austauschbar.
 
 > [!IMPORTANT]
-> Dieses Projekt ist ein unabhängiger Community-Leitfaden und kein offizielles DeepSeek-Repository. DeepSeek Harness befindet sich in der Developer Preview und kann inkompatible Änderungen enthalten. Maßgeblich sind das [offizielle Repository](https://github.com/deepseek-ai/deepseek-harness) und die [offizielle Dokumentation](https://deepseek-harness.github.io/deepseek-harness/).
+> DSH befindet sich in der Developer Preview und kann inkompatible Änderungen enthalten. Fixieren Sie den verwendeten Commit und prüfen Sie das [offizielle Repository](https://github.com/deepseek-ai/deepseek-harness). Dies ist ein unabhängiges Community-Projekt.
 
-## Warum ein Harness?
+## Einstieg
 
-Ein Modell allein liest kein Repository, führt keine Befehle aus, ruft keine Werkzeuge auf, fordert keine Freigaben an und speichert keine Sitzungen. Das Harness stellt diese Laufzeit bereit und koordiniert Benutzer, Modell, Werkzeuge und Anwendungszustand.
+| Ziel | Dokument |
+|---|---|
+| Architektur verstehen | [Technischer Leitfaden](GUIDE_de.md) |
+| Installieren, bedienen und Fehler suchen | [Bedienungsanleitung](USAGE_de.md) |
+| Einen Agent auf DSH entwickeln | [Agent-Entwicklung](#einen-agent-mit-dsh-entwickeln) |
+| Einen Coding Agent einsetzen | [Praktische Skills](skills/) |
 
-DeepSeek Harness basiert auf [Cordis](https://github.com/cordiverse/cordis). Plugins tragen Services, typisierte Events und reversible Effekte zu einem gemeinsamen Context bei. So lassen sich Modelle, Werkzeuge, Sandboxes, Speicher oder Subagenten austauschen, ohne die gesamte Anwendung zu forken.
+## Was ist DeepSeek Harness?
 
-## Kernbegriffe
+Ein Modell allein verwaltet keinen Workspace, führt Tools nicht sicher aus, bewahrt keine Session, fordert keine Freigabe an und stellt keine UI bereit. Ein Agent Harness liefert diese Betriebsschicht. DSH ist sowohl eine direkt nutzbare Web-Agent-Anwendung als auch ein Framework für Coding-, Research-, Operations- und Fachbereichs-Agents.
 
-| Begriff | Bedeutung |
-| --- | --- |
-| Plugin | TypeScript-Modul, Objekt oder Serviceklasse, die in einen Cordis Context eingebunden wird. |
-| Bundle | npm-Paket, das über `dsh.bundle` eine Konfigurationsschicht ausliefert. |
-| Profile | Startfähige Komposition aus Bundles und lokalen Plugin-Abhängigkeiten. |
-| Patch | YAML-Overlay zum Einfügen oder Ersetzen von Konfigurationszeilen. |
-| Service / Event | Austauschbare Fähigkeit bzw. Erweiterungspunkt im Agentenablauf. |
+Das Leitprinzip lautet **Everything is a Plugin**. Modell-Provider, Tools, Agent Loop, Session, Richtlinien, Sandbox, Speicher und UI verwenden dasselbe Cordis-Kompositionsmodell.
 
-Auch die Agentenschleife ist austauschbar. Der Standardablauf erstellt Prompts und Tool-Schemas, streamt Modellantworten, führt Werkzeuge aus und protokolliert dauerhafte Sitzungsereignisse.
+## Architektur
+
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> G["Cordis plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session events"]
+    S --> A
+    S --> U["Host API + Client UI"]
+```
+
+- Context, Service, Fiber, Effect, Event und Loader verwalten Sichtbarkeit, Abhängigkeiten und Lebenszyklus.
+- Bundle verteilt Konfiguration, Profile komponiert eine Runtime und Patch enthält Umgebungsabweichungen.
+- Der Agent Loop baut Kontext, ruft Modell und Tools auf und entscheidet über den Abschluss.
+- Session Events sind die wiederholbare, dauerhafte Faktenquelle; die UI ist eine Projektion.
+- Host enthält privilegierte Runtime-Funktionen, Client die Darstellung.
 
 ## Schnellstart
 
@@ -35,24 +49,34 @@ Auch die Agentenschleife ist austauschbar. Der Standardablauf erstellt Prompts u
 npx @deepseek-ai/dsh web
 ```
 
-Die Weboberfläche läuft standardmäßig unter `http://127.0.0.1:3080`. Hinterlege unter **Settings → Models** Zugangsdaten und wähle anschließend einen Workspace.
+Öffnen Sie `http://127.0.0.1:3080`, konfigurieren Sie unter **Settings → Models** ein Modell und wählen Sie einen Workspace. Prüfen Sie vor der Plugin-Fehlersuche die effektive Konfiguration:
 
-## Inhalt dieses Leitfadens
+```bash
+dsh --profile web --dump-config
+```
 
-- Cordis, Plugin-Lebenszyklus, Dependency Injection und reversible Effekte.
-- Plugins für Tools, Modelle, Sandboxes, Speicher, Subagenten und Web UI.
-- Bundles, Profiles, `cordis.patch.yml`, Tests, Veröffentlichung und Sicherheit.
-- Verfügbare Agent Skills: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` und `dsh-plugin-review`.
+## Einen Agent mit DSH entwickeln
 
-Ein **Skill** ist hier ein wiederverwendbarer Arbeitsablauf für KI-Coding-Agenten und nicht dasselbe wie ein DeepSeek-Harness-**Plugin**. Die genannten Skills liegen unter [`skills/`](skills/).
+1. Aufgabe, erlaubte Nebenwirkungen, Abschluss, Budget, Abbruch und Freigaben definieren.
+2. Profile wählen, Fähigkeiten als Bundles ergänzen und Umgebungsunterschiede in Patches halten.
+3. Modell, Prompt, Memory, Komprimierung und Tool-Sichtbarkeit festlegen.
+4. Tools, Services, Provider, Richtlinien und Workflows in kleine Plugins aufteilen.
+5. Den vorhandenen Agent Loop bevorzugen und nur bei anderer Planungs- oder Abschlusslogik ersetzen.
+6. Später modell- oder UI-sichtbare Ergebnisse als Session Events speichern.
+7. Runtime in den Host, Web-Darstellung in den Client legen und beide typisiert verbinden.
+8. Mount, Ablehnung, Timeout, Unload, Neustart und Rollback in einem temporären Profile testen.
 
-## Offizielle Ressourcen
+Ein Tool ist eine modellaufrufbare Runtime-Funktion. Ein Agent Skill führt einen Coding Agent durch Entwicklungsarbeit und ist kein DSH-Runtime-Plugin.
 
-- [Quellcode](https://github.com/deepseek-ai/deepseek-harness)
-- [Architektur](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [Erstes Plugin](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [Plugin paketieren und installieren](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+## Projektdokumentation
 
-## Lizenz
+- [Technischer Leitfaden](GUIDE_de.md): Cordis, Lebenszyklus, Session, Cache und Sicherheitsgrenzen.
+- [Bedienungsanleitung](USAGE_de.md): Installation, Module, Plugin-Entwicklung, Fehlersuche und Release-Prüfung.
+- [Praktische Skills](skills/): Repository-Analyse, Plugin-Gerüst, Tool-Entwicklung und Sicherheitsprüfung.
+- Ausführliche Fassungen: [English](README.md) und [简体中文](README_zh.md).
 
-[MIT](LICENSE)
+## Sicherheit und Kompatibilität
+
+Fixieren Sie DSH- und Plugin-Commits. Prüfen Sie Installationsskripte, Dateien, Netzwerk, Unterprozesse und Datenaufbewahrung. Dependency Injection, Richtlinie, Benutzerfreigabe und OS-Sandbox sind getrennte Grenzen. Reale Zugangsdaten, private Sessions, Screenshots, QR-Codes und Kontaktdaten gehören nicht in die Dokumentation.
+
+[MIT License](LICENSE)

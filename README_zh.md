@@ -2,78 +2,135 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [技术架构 →](GUIDE_zh.md) · [使用手册 →](USAGE_zh.md) · [实用 Skills →](skills/)
+> 面向 Agent 开发者的多语言指南：理解、运行、扩展 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)，并基于它开发自己的智能体。
 
-> 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 理解、扩展与插件开发的社区多语言指南。
+DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 **Agent Runtime 与组合框架**。它把模型、提示词、工具、权限、沙箱、会话、子 Agent、遥测和用户界面连接成可运行的智能体，并通过统一插件架构让这些模块能够组合与替换。
 
-DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的智能体 Harness。它最核心的设计理念是：**一切皆插件（Everything is a Plugin）**。模型适配器、工具、智能体循环、会话存储、权限、沙箱、遥测和用户界面，都可以通过配置进行组合或替换。
-
-本项目希望把这套架构转化为易读的原理说明、可复现的插件教程、可复用的开发工作流，以及一条从“什么是 Harness”到发布生产级 `dsh` 插件的学习路径。
+本仓库负责把这套系统讲清楚并转化为可操作的开发路径。它是独立社区指南，不是 DeepSeek 官方项目。
 
 > [!IMPORTANT]
-> 本仓库是独立的社区指南，不是 DeepSeek 官方仓库。DeepSeek Harness 目前处于开发者预览阶段，可能出现破坏兼容性的变更。具体实现请始终以[官方仓库](https://github.com/deepseek-ai/deepseek-harness)和[官方文档](https://deepseek-harness.github.io/deepseek-harness/)为准。
+> DeepSeek Harness 目前处于开发者预览阶段，官方明确提示可能出现破坏兼容性的变更。项目应固定所使用的 DSH Commit，并始终以[官方仓库](https://github.com/deepseek-ai/deepseek-harness)中的实际代码和文档为准。
 
-## 为什么需要 Harness
+## 从这里开始
 
-模型本身不会自动读取代码仓库、执行命令、调用工具、申请授权、保存会话或从失败中恢复。**Harness** 提供了这些运行环境，并负责协调用户、模型、工具和应用状态之间的循环。
+| 你的目标 | 建议入口 |
+|---|---|
+| 先弄清楚 DSH 是什么 | [什么是 DeepSeek Harness](#什么是-deepseek-harness) |
+| 理解整体技术架构 | [技术架构](#技术架构)与[完整技术指南](GUIDE_zh.md) |
+| 启动 Web UI 或使用 SDK | [快速使用](#快速使用)与[完整使用手册](USAGE_zh.md) |
+| 基于 DSH 开发 Agent | [基于 DSH 开发 Agent](#基于-dsh-开发-agent) |
+| 开发或发布插件 | [选择正确的扩展方式](#选择正确的扩展方式)与[官方插件教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md) |
+| 让编码 Agent 协助开发 | [实用 Agent Skills](#实用-agent-skills) |
+| 审查第三方插件 | [安全与兼容性](#安全与兼容性) |
 
-DeepSeek Harness 的特别之处在于，扩展机制并不是附着在核心外面的一层接口；它自身的内置能力也由开发者可使用的同一套插件机制组合而成。这使团队能够：
+## 目录
 
-- 替换模型供应商、工具实现、沙箱、存储或子智能体，而不必维护整个项目的分叉；
-- 用可复用组件组装编码、研究、运维或垂直领域智能体；
-- 将插件和配置作为带版本的 Bundle 分发；
-- 通过 Profile 与 Patch 为不同部署覆盖配置；
-- 卸载或热替换插件，并自动清理它注册的副作用。
+- [什么是 DeepSeek Harness](#什么是-deepseek-harness)
+- [技术架构](#技术架构)
+- [快速使用](#快速使用)
+- [基于 DSH 开发 Agent](#基于-dsh-开发-agent)
+- [选择正确的扩展方式](#选择正确的扩展方式)
+- [本项目文档地图](#本项目文档地图)
+- [实用 Agent Skills](#实用-agent-skills)
+- [安全与兼容性](#安全与兼容性)
 
-## 一分钟理解 DeepSeek Harness
+## 什么是 DeepSeek Harness
 
-### 1. Cordis 负责组合
+模型能够生成文本或工具调用，但模型本身不会管理工作区、安全执行工具、保存会话、请求用户审批、处理中断、协调子 Agent 或提供用户界面。**Agent Harness** 就是负责这些工作的运行层。
 
-DeepSeek Harness 基于 [Cordis](https://github.com/cordiverse/cordis) 构建。Cordis 是一个强调“时空可组合性”的元框架：插件向共享 Context 提供服务、类型化事件和可逆副作用；依赖通过声明表达，插件移除时，相关注册能够被撤销。
+DSH 同时扮演两个角色：
 
-### 2. 运行中的 Harness 是一棵插件树
+1. **可以直接运行的 Agent 应用**：启动官方 Web UI，配置模型，选择工作区并执行 Agent 会话。
+2. **用于组装 Agent 产品的框架**：在不维护整套 Runtime Fork 的情况下，替换或新增模型、工具、Agent Loop、存储、沙箱、策略、界面和工作流。
 
-`dsh` 从一个 **Profile** 启动，按顺序叠加多个 **Bundle**，再应用用户级与命令行 **Patch**。官方提供的 `web` 和 `headless` 也是组合出来的运行形态，而不是不可替换的特殊核心。
+它最核心的设计是 **一切皆插件（Everything is a Plugin）**。内置能力和第三方扩展使用同一套组合机制，并由 [Cordis](https://github.com/cordiverse/cordis) 提供运行时基础。因此，DSH 更接近一套可以动态组装的 Agent Runtime，而不是功能固定的单一编码助手。
 
-| 概念 | 含义 |
-| --- | --- |
-| Plugin | 挂载到 Cordis Context 的 TypeScript 模块、对象或服务类。 |
-| Bundle | 通过 `dsh.bundle` 提供配置层的 npm 包。 |
-| Profile | 列出 Bundle 并保存本地插件依赖的一套可运行组合。 |
-| Patch | 插入或替换配置行的 YAML 覆盖层；越晚应用的层优先级越高。 |
-| Service | 由一个插件提供、被其他插件消费的类型化能力。 |
-| Event | 用于记录事实、观察或拦截智能体流程的持久事件或实时扩展点。 |
+### 本项目补充了什么
 
-### 3. 智能体循环也可替换
+官方项目提供实现与规范，本指南重点补充：
 
-默认流程会组装系统提示词和工具 Schema，流式请求模型，通过受保护的执行管线调用工具，将关键事实写入会话事件日志，并持续执行，直到没有待完成的工作。智能体循环、模型适配器、工具注册表和会话日志本身也都是插件提供的能力接缝。
+- 面向快速迭代源码的稳定心智模型；
+- 多语言架构说明和操作手册；
+- Agent、工具、模型、会话、策略和 UI 的开发决策路径；
+- 生命周期、权限、供应链和发布审查清单；
+- 帮助编码 Agent 探索、搭建、开发和审查 DSH 扩展的实用 Skills。
 
-### 4. Host 与 Client 分离
+## 技术架构
 
-官方 Monorepo 将 Node.js Host 包与浏览器 Client 包分开。Host 服务可以为 Web UI 生成远程 API，Client 插件可以扩展界面。开发插件前，需要先判断能力应位于运行时、浏览器，还是同时跨越两端。
+理解 DSH 需要同时看到两套相互配合的结构：
 
-## 本项目计划覆盖的内容
+- **Runtime 插件图**决定当前有哪些能力、能力在哪里可见、生命周期由谁负责；
+- **Session 事件流**保存能够重建模型上下文和界面状态的持久事实。
 
-- **快速开始**：运行 Web UI、配置模型、选择工作区和理解权限。
-- **架构原理**：Context、可逆副作用、Service、Event、Scope、会话日志与 Turn/Step 生命周期。
-- **插件基础**：`apply(ctx)`、依赖注入、配置 Schema、资源清理和热替换。
-- **工具插件**：类型化输入、规范化输出、模型可见渲染、策略钩子和受控执行。
-- **能力提供者**：模型、文件系统、子进程、沙箱、存储、遥测与子智能体。
-- **Web 扩展**：Host/Client 边界、远程 API、UI 扩展与构建顺序。
-- **打包分发**：Bundle、Profile、`cordis.patch.yml`、npm/Git 安装、版本与发布。
-- **质量与安全**：测试、权限边界、密钥、安装脚本、依赖审查和发布检查。
+Agent Loop 连接二者：从插件图获取模型、提示词、工具、策略与存储能力，执行任务，再把规范化结果写回 Session。
 
-## 使用官方项目快速开始
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> L["Cordis Loader"]
+    L --> G["Runtime 插件图"]
+    G --> A["Agent Loop"]
+    A --> M["模型 Provider"]
+    A --> T["工具 + 策略 + 沙箱"]
+    A --> S["Session 事件流"]
+    S --> A
+    S --> H["Host API"]
+    H --> U["Web / 桌面 / TUI / 其他 Client"]
+```
 
-准备受支持的 Node.js 版本，以及 DeepSeek API Key（也可以配置其他模型端点），然后运行：
+### Runtime 组合机制
+
+| 概念 | 职责 |
+|---|---|
+| **Plugin** | 挂载到 Cordis Context 的 TypeScript 函数、对象或 Service 类。 |
+| **Context** | 控制能力可见范围与资源归属。 |
+| **Service** | 由 Provider 提供、Consumer 通过 `inject` 消费的类型化能力。 |
+| **Fiber** | 一次真实运行的插件挂载，拥有独立生命周期。 |
+| **Effect** | 随所属 Fiber 卸载而清理的资源注册。 |
+| **Event** | 插件之间用于观察或拦截流程的类型化扩展点。 |
+| **Loader** | 把有序配置持续调和为运行中的插件图。 |
+
+### 部署组合机制
+
+| 概念 | 职责 |
+|---|---|
+| **Bundle** | 通过 `dsh.bundle` 分发一层配置的 npm Package。 |
+| **Profile** | 由有序 Bundle 与本地依赖构成的一套可运行组合。 |
+| **Patch** | 后置插入或替换配置行的 YAML 覆盖层。 |
+| **Preset** | 会话级 Agent 行为，不是另一套进程级 Profile。 |
+
+### Agent 执行链
+
+一次典型 Turn 会经历：
+
+1. 从持久 Session Event 重建模型可见上下文；
+2. 组装系统提示词、工具 Schema、模型路由与策略状态；
+3. 流式请求模型；
+4. 对工具调用进行校验、授权、审批与执行；
+5. 把规范化结果写入 Session Event；
+6. 按 Agent Loop 的完成条件决定继续或结束；
+7. 把同一事件状态投影到 Web 或其他 Client。
+
+Context、Service、Fiber、Effect、Event、Session、Turn/Step、缓存和安全边界的完整说明见[技术架构指南](GUIDE_zh.md)。
+
+## 快速使用
+
+### 启动官方 Web UI
+
+安装 Node.js 22.19 或 24+ 版本（部署前请再次核对[官方开发指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.zh.md)），然后运行：
 
 ```bash
 npx @deepseek-ai/dsh web
 ```
 
-Web UI 默认位于 `http://127.0.0.1:3080`。在 **Settings → Models** 中添加模型凭证，选择工作区后即可开始会话。
+打开 `http://127.0.0.1:3080`，在 **Settings → Models** 配置模型服务，选择工作区，并先执行无破坏性的简单任务。
 
-从源码运行：
+排查扩展问题前，先查看最终插件树：
+
+```bash
+dsh --profile web --dump-config
+```
+
+### 从源码运行
 
 ```bash
 git clone https://github.com/deepseek-ai/deepseek-harness.git
@@ -83,106 +140,111 @@ pnpm run build
 pnpm dsh web
 ```
 
-当前环境要求与命令以官方的 [Web UI 指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/index.zh.md)和[开发指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.zh.md)为准。
+官方还提供用于程序化嵌入的 Python SDK。SDK 配置、插件安装、回滚和排障流程见[完整使用手册](USAGE_zh.md)。
 
-## 最小插件示例
+## 基于 DSH 开发 Agent
 
-```ts
-import type { Context } from '@deepseek-ai/cordis'
+开发一个 Agent 通常意味着组合多个 DSH 扩展点，而不是编写一个庞大的全能插件。
 
-export const name = 'hello-plugin'
+### 1. 定义 Agent 契约
 
-export function apply(ctx: Context) {
-  ctx.effect(() => {
-    console.log('[hello-plugin] loaded')
-    return () => console.log('[hello-plugin] unloaded')
-  })
-}
-```
+先明确目标用户、任务边界、允许产生的副作用、所需数据、完成条件、预算、取消行为和人工审批节点。这些约束决定真正需要哪些 Runtime 能力。
 
-用本地 Patch 挂载模块：
+### 2. 选择 Runtime 组合
 
-```yaml
-- insert:
-    - id: hello
-      name: '/absolute/path/to/hello-plugin.ts'
-```
+从最接近目标宿主的 Profile 开始，通过带版本的 Bundle 增加能力，把环境差异放进 Patch。开发外部插件时先使用一次性 Profile。
 
-```bash
-pnpm dsh web --patch ./cordis.patch.yml
-```
+### 3. 配置模型与上下文
 
-真实插件还应通过 `inject` 声明所消费的 Service，使用 Schemastery `Config` Schema 暴露可配置项，并通过 `ctx` 注册工具或服务，让副作用遵循插件生命周期。建议从官方[第一个插件教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md)开始。
+选择或实现模型 Provider，再确定提示词组装、工作区指令、记忆、压缩与工具可见范围。尽量保持系统提示词和工具 Schema 前缀稳定，以便利用模型服务的前缀缓存。
 
-## 值得探索的插件方向
+### 4. 把能力拆成小型插件
 
-| 方向 | 插件示例 | 主要扩展点 |
-| --- | --- | --- |
-| 工具 | Issue 管理、数据库查询、部署、代码搜索 | `ctx.tools` |
-| 模型 | OpenAI 兼容接口或私有推理服务 | `ctx.llm` |
-| 运行环境 | 远程文件系统、容器沙箱、云端子进程 | Capability Service |
-| 智能体行为 | 规划、校验、路由、交接、子智能体 | `agent/*` 事件与 Agent Service |
-| 持久化 | 团队会话存储、审计归档、对话导出 | Session Event 与 `ctx.sessions` |
-| 界面 | 垂直领域面板、设置页、工具结果卡片 | Client Plugin 与远程 API |
-| 治理 | 审批策略、脱敏、遥测、成本控制 | Policy 与 Telemetry Event |
+按职责创建 Provider 和 Consumer：
 
-## 已提供的 Agent Skills
+- 用 Tool 承载模型主动请求的操作；
+- 用 Service 暴露可复用 Runtime 能力；
+- 用 Event 观察或拦截流程；
+- 现有实现不适用时，再增加模型、文件系统、子进程、沙箱、存储、遥测或子 Agent Provider。
 
-本指南里的 **Skill** 指 AI 编码助手可复用的指令工作流，和 DeepSeek Harness 运行时 **Plugin** 不是同一个概念。以下 Skill 已在 [`skills/`](skills/) 提供：
+通过 `inject` 声明消费的 Service，并使用具备生命周期感知能力的 `ctx` 方法注册资源。
+
+### 5. 设计 Agent Loop 与策略
+
+如果只是改变提示词、工具或策略，应优先复用现有 Loop。只有规划、路由、校验、交接、重试或完成语义确实不同时，才替换或包装 Agent Loop。Schema 校验、授权、用户审批和操作系统沙箱必须作为四种不同控制来设计。
+
+### 6. 让状态可以重放
+
+只要某项事实之后仍会被模型或 UI 看见，就应写成规范化 Session Event。UI 是投影，不是事实源。必须测试取消、工具部分失败、进程重启、上下文压缩和事件重放。
+
+### 7. 只在需要时增加界面
+
+Runtime 行为放在 Host，浏览器呈现放在 Client Plugin。跨端能力通过类型化 Remote API 连接，不要在 UI 里维护第二份业务状态。
+
+### 8. 打包并验证
+
+把可分发配置打包为 Bundle，安装进一次性 Profile，检查 `--dump-config`，并验证挂载、正常执行、拒绝、超时、卸载、重新挂载、重启、移除和回滚。
+
+## 选择正确的扩展方式
+
+| 目标 | 优先选择 | 不要混淆为 |
+|---|---|---|
+| 增加模型可以调用的操作 | Tool Plugin | Agent Skill |
+| 在插件间共享 Runtime 能力 | Service Provider Plugin | 生命周期之外的全局单例 |
+| 改变规划或完成逻辑 | 先使用 Prompt/Policy Plugin，必要时使用 Agent Loop | 为每种行为创建 Profile |
+| 增加模型或基础设施后端 | Provider Plugin | 把实现硬编码进 Loop |
+| 保存记忆或审计信息 | Session/Storage Plugin 与持久 Event | 只存在于 UI 的状态 |
+| 增加 Web 面板或结果卡片 | Client Plugin + 类型化 Host API | 拥有高权限的浏览器代码 |
+| 分发配置与插件 | Bundle | Profile |
+| 组装可安装 Runtime | Profile | Runtime Fork |
+| 连接独立应用 | Client 或协议 Bridge | 进程内 Plugin |
+| 指导编码 Agent 进行开发 | Agent Skill | DSH Runtime Plugin |
+
+常见 Agent 产品模块还包括：工作流与计划、工具与外部集成、上下文与记忆、会话与重放、子 Agent、模型路由、浏览器与视觉、策略与沙箱、UI Surface、运维与遥测。分类模块地图和安装检查表见[使用手册](USAGE_zh.md)。
+
+## 本项目文档地图
+
+| 资料 | 解决的问题 |
+|---|---|
+| [技术架构指南](GUIDE_zh.md) | 架构、生命周期、Session 模型、缓存和安全边界 |
+| [使用手册](USAGE_zh.md) | 安装、模块选择、插件/工具开发、排障和发布检查 |
+| [实用 Skills](skills/) | 面向编码 Agent 的 DSH 开发工作流 |
+| [贡献规范](CONTRIBUTING_zh.md) | 资料来源、翻译、审查与贡献要求 |
+| [项目路线图](ROADMAP_zh.md) | 示例、验证、兼容信息和生态工作的后续计划 |
+
+README、技术架构指南和使用手册目前均提供 15 种语言入口。
+
+## 实用 Agent Skills
+
+以下仓库级 Skills 可以指导兼容的编码 Agent 完成常见 DSH 工作。Skill 是指令工作流，**不通过** `dsh plugin` 安装，也不会在 DSH Runtime 内自动执行。
 
 | Skill | 用途 |
-| --- | --- |
-| `dsh-repository-explorer` | 修改代码前梳理 Package、插件配置行、Service、Event 和 Host/Client 归属。 |
-| `dsh-plugin-scaffold` | 创建最小插件、配置 Schema、Patch、测试和包元数据。 |
-| `dsh-tool-builder` | 构建带校验、渲染、策略钩子和生命周期安全注册的类型化工具。 |
-| `dsh-plugin-review` | 审查依赖注入、副作用清理、权限、密钥、打包方式和兼容性风险。 |
+|---|---|
+| [`dsh-repository-explorer`](skills/dsh-repository-explorer/) | 梳理 Profile、Bundle、Patch、Package、Service、Event、Session 与 Host/Client 归属。 |
+| [`dsh-plugin-scaffold`](skills/dsh-plugin-scaffold/) | 创建职责单一、生命周期安全的插件及可选打包配置。 |
+| [`dsh-tool-builder`](skills/dsh-tool-builder/) | 设计类型化、受策略约束、有界且可重放的工具。 |
+| [`dsh-plugin-review`](skills/dsh-plugin-review/) | 审查兼容性、生命周期、供应链、权限、密钥和重放风险。 |
 
-每个 Skill 都明确了触发场景、执行步骤、安全边界、完成检查，并链接到对应的官方契约。
+## 安全与兼容性
 
-## 推荐学习路径
+- 固定 DSH 与第三方插件 Commit；预览 API 不是稳定契约。
+- 使用 `dsh --profile <name> --dump-config` 检查实际运行组合。
+- 允许依赖安装脚本或 `prepare` Script 运行前，先审查固定版本源码。
+- 把同进程插件、动态 JavaScript、子进程、文件系统访问和网络访问视为高权限行为。
+- 不要把 `inject` 描述成沙箱；依赖可见性、策略、审批和操作系统隔离是不同边界。
+- 不在示例与文档中放置真实凭证、私有 Session、截图、二维码和联系方式。
+- 生态清单收录只代表可发现，不代表安全背书。
 
-1. 运行 `dsh web`，完成一次普通的代码仓库任务。
-2. 阅读官方[架构说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.zh.md)。
-3. 按官方教程构建最小插件。
-4. 为插件添加类型化工具与配置 Schema。
-5. 使用 `dsh --profile web --dump-config` 查看实际插件树。
-6. 将插件打包为 Bundle，并安装到临时 Profile 中验证。
-7. 添加测试，审查权限，再考虑发布。
-
-## 权威资料
+## 官方与社区资料
 
 - [DeepSeek Harness 官方仓库](https://github.com/deepseek-ai/deepseek-harness)
-- [DeepSeek Harness 官方文档](https://deepseek-harness.github.io/deepseek-harness/)
-- [架构说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.zh.md)
-- [插件入门](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md)
-- [工具开发](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.zh.md)
-- [插件打包与安装](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)
-- [Cordis](https://github.com/cordiverse/cordis)
-- [时空可组合性论文](https://github.com/cordiverse/paper)
+- [官方架构说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.zh.md)
+- [官方第一个插件教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md)
+- [官方工具开发教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.zh.md)
+- [官方插件打包与安装](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)
+- [Cordis](https://github.com/cordiverse/cordis)与[时空可组合性论文](https://github.com/cordiverse/paper)
+- [社区生态分类参考](https://github.com/libukai/awesome-deepseek-harness)
 
-## 参与贡献
+## 贡献与许可证
 
-欢迎提交勘误、翻译、示例、插件案例和可复用 Skill。请让关键结论链接到官方源码或可复现代码；对预览 API 做清晰标注；示例中不要包含真实凭证。
-
-- [技术指南](GUIDE_zh.md)
-- [使用手册](USAGE_zh.md)
-- [实用 Skills](skills/)
-- [贡献规范](CONTRIBUTING_zh.md)
-- [项目路线图](ROADMAP_zh.md)
-
-当前文档结构：
-
-```text
-deepeseek-harness-guide/
-├── README*.md        # 项目介绍与语言入口
-├── GUIDE*.md         # 多语言技术架构指南
-├── USAGE*.md         # 多语言操作指引与模块手册
-├── skills/           # 面向 DSH 开发的可复用编码 Agent 工作流
-├── CONTRIBUTING*.md  # 信息来源、审查与翻译规范
-├── ROADMAP*.md       # 分阶段项目演进计划
-└── LICENSE
-```
-
-## 许可证
-
-[MIT](LICENSE)
+欢迎提交勘误、翻译、示例、固定 Commit 的案例研究和实用 Skills。参与前请阅读[贡献规范](CONTRIBUTING_zh.md)。本项目使用 [MIT License](LICENSE)。

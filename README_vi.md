@@ -2,32 +2,46 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Kiến trúc kỹ thuật →](GUIDE_vi.md) · [Hướng dẫn sử dụng →](USAGE_vi.md) · [Skills thực dụng →](skills/)
+> Hướng dẫn đa ngôn ngữ giúp developer hiểu, chạy và mở rộng [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), rồi xây dựng Agent riêng trên nền tảng này.
 
-> Hướng dẫn cộng đồng đa ngôn ngữ để tìm hiểu, mở rộng và xây dựng plugin cho [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
-
-DeepSeek Harness (`dsh`) là agent harness mã nguồn mở do DeepSeek AI phát triển. Ý tưởng cốt lõi là: **mọi thứ đều là plugin**. Bộ điều hợp mô hình, công cụ, vòng lặp agent, lưu trữ phiên, quyền hạn, sandbox, telemetry và giao diện đều có thể được kết hợp hoặc thay thế bằng cấu hình.
+DeepSeek Harness (`dsh`) là **Agent Runtime và framework tổ hợp** mã nguồn mở của DeepSeek AI. DSH kết nối mô hình, prompt, công cụ, quyền, sandbox, phiên, subagent, telemetry và giao diện, đồng thời cho phép thay thế từng mô-đun bằng kiến trúc plugin chung.
 
 > [!IMPORTANT]
-> Đây là hướng dẫn cộng đồng độc lập, không phải kho chính thức của DeepSeek. DeepSeek Harness hiện ở giai đoạn Developer Preview và có thể có thay đổi không tương thích. Luôn kiểm tra [kho chính thức](https://github.com/deepseek-ai/deepseek-harness) và [tài liệu chính thức](https://deepseek-harness.github.io/deepseek-harness/).
+> DSH đang ở giai đoạn Developer Preview và có thể có thay đổi không tương thích. Hãy ghim commit sử dụng và kiểm tra [kho chính thức](https://github.com/deepseek-ai/deepseek-harness). Đây là dự án hướng dẫn cộng đồng độc lập.
 
-## Vì sao cần Harness?
+## Bắt đầu từ đây
 
-Một mô hình riêng lẻ không tự đọc kho mã, chạy lệnh, gọi công cụ, xin phê duyệt, lưu phiên hay phục hồi sau lỗi. Harness cung cấp môi trường vận hành đó và điều phối người dùng, mô hình, công cụ cùng trạng thái ứng dụng.
+| Mục tiêu | Tài liệu |
+|---|---|
+| Hiểu kiến trúc | [Hướng dẫn kỹ thuật](GUIDE_vi.md) |
+| Cài đặt, sử dụng và xử lý lỗi | [Hướng dẫn sử dụng](USAGE_vi.md) |
+| Phát triển Agent trên DSH | [Lộ trình phát triển](#phát-triển-agent-với-dsh) |
+| Dùng coding agent hỗ trợ | [Skills thực dụng](skills/) |
 
-DeepSeek Harness sử dụng [Cordis](https://github.com/cordiverse/cordis). Plugin đóng góp Service, Event có kiểu và Effect có thể đảo ngược vào Context dùng chung. Nhờ vậy, nhóm có thể thay mô hình, công cụ, sandbox, lưu trữ hoặc subagent mà không cần fork toàn bộ ứng dụng.
+## DeepSeek Harness là gì
 
-## Khái niệm chính
+Mô hình đơn lẻ không quản lý workspace, không chạy công cụ an toàn, không lưu Session, không xin phê duyệt và không cung cấp UI. Agent Harness cung cấp lớp vận hành đó. DSH vừa là Web Agent có thể dùng ngay, vừa là framework để lắp ghép Agent lập trình, nghiên cứu, vận hành và chuyên ngành.
 
-| Khái niệm | Ý nghĩa |
-| --- | --- |
-| Plugin | Mô-đun TypeScript, đối tượng hoặc lớp Service được gắn vào Cordis Context. |
-| Bundle | Gói npm cung cấp một lớp cấu hình qua `dsh.bundle`. |
-| Profile | Cấu hình có thể chạy gồm Bundles và dependency cục bộ. |
-| Patch | Lớp YAML chèn hoặc thay thế các hàng cấu hình. |
-| Service / Event | Năng lực có thể thay thế và điểm mở rộng trong luồng agent. |
+Nguyên tắc chính là **Everything is a Plugin**. Model provider, công cụ, Agent Loop, Session, policy, sandbox, storage và UI đều dùng chung mô hình tổ hợp Cordis.
 
-Bản thân agent loop cũng có thể thay thế. Vòng lặp mặc định lắp ráp prompt và schema công cụ, stream phản hồi mô hình, chạy công cụ và ghi lại các event phiên bền vững.
+## Kiến trúc
+
+```mermaid
+flowchart LR
+    C["Profile + Bundle + Patch"] --> G["Cordis plugin graph"]
+    G --> A["Agent Loop"]
+    A --> M["Model"]
+    A --> T["Tools + policy + sandbox"]
+    A --> S["Session events"]
+    S --> A
+    S --> U["Host API + Client UI"]
+```
+
+- Context, Service, Fiber, Effect, Event và Loader quản lý phạm vi, phụ thuộc và vòng đời.
+- Bundle phân phối cấu hình, Profile tổ hợp runtime, Patch giữ khác biệt môi trường.
+- Agent Loop xây dựng ngữ cảnh, gọi mô hình và công cụ, rồi quyết định hoàn tất.
+- Session Event là nguồn dữ kiện bền vững có thể phát lại; UI là một phép chiếu.
+- Host giữ năng lực đặc quyền, Client đảm nhiệm trình bày.
 
 ## Bắt đầu nhanh
 
@@ -35,24 +49,34 @@ Bản thân agent loop cũng có thể thay thế. Vòng lặp mặc định l�
 npx @deepseek-ai/dsh web
 ```
 
-Web UI mặc định chạy tại `http://127.0.0.1:3080`. Thêm thông tin xác thực trong **Settings → Models**, sau đó chọn workspace.
+Mở `http://127.0.0.1:3080`, cấu hình mô hình trong **Settings → Models** và chọn workspace. Trước khi chẩn đoán plugin, kiểm tra tổ hợp thực tế:
 
-## Nội dung hướng dẫn
+```bash
+dsh --profile web --dump-config
+```
 
-- Cordis, vòng đời plugin, dependency injection và effect có thể đảo ngược.
-- Plugin cho công cụ, mô hình, sandbox, lưu trữ, subagent và Web UI.
-- Bundles, Profiles, `cordis.patch.yml`, kiểm thử, phát hành và bảo mật.
-- Agent Skills có sẵn: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` và `dsh-plugin-review`.
+## Phát triển Agent với DSH
 
-Ở đây, **Skill** là quy trình hướng dẫn có thể tái sử dụng cho agent lập trình, không phải **Plugin** runtime của DeepSeek Harness. Các Skills nằm trong [`skills/`](skills/).
+1. Xác định nhiệm vụ, tác động được phép, điều kiện hoàn tất, ngân sách, hủy và phê duyệt.
+2. Chọn Profile, thêm năng lực bằng Bundle và giữ khác biệt trong Patch.
+3. Thiết kế mô hình, Prompt, bộ nhớ, compact và phạm vi công cụ.
+4. Tách Tool, Service, Provider, policy và workflow thành plugin nhỏ.
+5. Ưu tiên Agent Loop hiện có; chỉ thay khi logic lập kế hoạch hoặc hoàn tất thực sự khác.
+6. Ghi kết quả mà mô hình hoặc UI cần dựng lại thành Session Event.
+7. Đặt runtime trong Host, giao diện Web trong Client và nối bằng API có kiểu.
+8. Kiểm thử mount, từ chối, timeout, unload, restart và rollback trong Profile tạm thời.
 
-## Tài nguyên chính thức
+Tool là năng lực runtime do mô hình gọi. Agent Skill hướng dẫn coding agent và không phải plugin DSH Runtime.
 
-- [Mã nguồn](https://github.com/deepseek-ai/deepseek-harness)
-- [Kiến trúc](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md)
-- [Plugin đầu tiên](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md)
-- [Đóng gói và cài đặt](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
+## Tài liệu dự án
 
-## Giấy phép
+- [Hướng dẫn kỹ thuật](GUIDE_vi.md): Cordis, vòng đời, Session, cache và bảo mật.
+- [Hướng dẫn sử dụng](USAGE_vi.md): cài đặt, mô-đun, plugin, xử lý lỗi và phát hành.
+- [Skills thực dụng](skills/): khám phá nguồn, dựng plugin, phát triển công cụ và rà soát bảo mật.
+- Bản đầy đủ: [English](README.md) và [简体中文](README_zh.md).
 
-[MIT](LICENSE)
+## Bảo mật và tương thích
+
+Ghim commit DSH và plugin. Kiểm tra script cài đặt, tệp, mạng, tiến trình con và lưu giữ dữ liệu. Dependency injection, policy, phê duyệt người dùng và OS sandbox là các ranh giới riêng. Không đưa thông tin xác thực thật, Session riêng tư, ảnh chụp, mã QR hoặc liên hệ vào tài liệu.
+
+[MIT License](LICENSE)
