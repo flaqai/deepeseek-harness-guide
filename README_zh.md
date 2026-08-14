@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — 从首次运行到 Agent 开发](assets/deepseek-harness-guide-hero.png)
+
 > 面向 Agent 开发者的多语言指南：理解、运行、扩展 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)，并基于它开发自己的智能体。
 
 DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 **Agent Runtime 与组合框架**。它把模型、提示词、工具、权限、沙箱、会话、子 Agent、遥测和用户界面连接成可运行的智能体，并通过统一插件架构让这些模块能够组合与替换。

@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — من التشغيل الأول إلى تطوير Agent](assets/deepseek-harness-guide-hero.png)
+
 > دليل متعدد اللغات للمطورين لفهم [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) وتشغيله وتوسيعه وبناء وكلاء مخصصين فوقه.
 
 DeepSeek Harness أو `dsh` هو **Runtime وإطار تركيب للوكلاء** مفتوح المصدر من DeepSeek AI. يربط النماذج والتعليمات والأدوات والصلاحيات والعزل والجلسات والوكلاء الفرعيين والقياس والواجهات، ويجعل الوحدات قابلة للاستبدال عبر بنية إضافات مشتركة.

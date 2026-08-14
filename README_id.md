@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — Dari eksekusi pertama hingga pengembangan Agent](assets/deepseek-harness-guide-hero.png)
+
 > Panduan multibahasa untuk developer yang ingin memahami, menjalankan, dan memperluas [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), lalu membangun Agent sendiri di atasnya.
 
 DeepSeek Harness (`dsh`) adalah **Agent Runtime dan framework komposisi** sumber terbuka dari DeepSeek AI. DSH menghubungkan model, prompt, alat, izin, sandbox, sesi, subagent, telemetri, dan antarmuka, serta membuat modul tersebut dapat diganti melalui arsitektur plugin bersama.

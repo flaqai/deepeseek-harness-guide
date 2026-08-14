@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — От первого запуска до разработки Agent](assets/deepseek-harness-guide-hero.png)
+
 > Многоязычное руководство для разработчиков: как понять, запустить и расширить [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), а затем создать на нём своего агента.
 
 DeepSeek Harness (`dsh`) — открытый **runtime и фреймворк композиции агентов** от DeepSeek AI. Он объединяет модели, prompts, инструменты, разрешения, песочницы, сессии, субагентов, телеметрию и интерфейсы, позволяя заменять модули через общую архитектуру плагинов.

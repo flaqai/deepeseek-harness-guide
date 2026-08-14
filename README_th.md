@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — จากการเรียกใช้ครั้งแรกสู่การพัฒนา Agent](assets/deepseek-harness-guide-hero.png)
+
 > คู่มือหลายภาษาสำหรับนักพัฒนาเพื่อทำความเข้าใจ เรียกใช้ และขยาย [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) รวมถึงสร้าง Agent ของตนเอง
 
 DeepSeek Harness (`dsh`) คือ **Agent Runtime และเฟรมเวิร์กสำหรับประกอบระบบ** แบบโอเพนซอร์สจาก DeepSeek AI โดยเชื่อมโมเดล prompt เครื่องมือ สิทธิ์ sandbox session subagent telemetry และ UI และทำให้แต่ละโมดูลเปลี่ยนได้ผ่านสถาปัตยกรรมปลั๊กอินเดียวกัน

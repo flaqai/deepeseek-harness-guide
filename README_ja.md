@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — 初回実行から Agent 開発まで](assets/deepseek-harness-guide-hero.png)
+
 > Agent 開発者が [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) を理解・実行・拡張し、独自 Agent を構築するための多言語ガイドです。
 
 DeepSeek Harness（`dsh`）は DeepSeek AI が公開した **Agent Runtime と構成フレームワーク**です。モデル、Prompt、ツール、権限、サンドボックス、Session、Subagent、テレメトリー、UI を動作する Agent にまとめ、共通のプラグイン方式で交換可能にします。

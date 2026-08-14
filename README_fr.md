@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+![DeepSeek Harness Guide — Du premier lancement au développement d'Agents](assets/deepseek-harness-guide-hero.png)
+
 > Guide multilingue pour comprendre, exécuter et étendre [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), puis développer ses propres agents avec ce framework.
 
 DeepSeek Harness (`dsh`) est un **runtime et framework de composition d'agents** open source de DeepSeek AI. Il relie modèles, prompts, outils, permissions, sandbox, sessions, sous-agents, télémétrie et interfaces, et rend ces modules remplaçables via une architecture commune de plugins.
