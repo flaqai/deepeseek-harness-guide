@@ -57,6 +57,18 @@ npx @deepseek-ai/dsh web
 dsh --profile web --dump-config
 ```
 
+## OpenPencil Plugin installieren und testen
+
+Dies ist das versionsgebundene Beispiel der Referenzseite. Stoppen Sie die Web UI, prüfen Sie `op --version` und verwenden Sie dieselbe DSH-Version für Installation, Prüfung, Start und Entfernung.
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+Fordern Sie in einer neuen Session das Erstellen und Prüfen eines `.op`-Dokuments an. Prüfen Sie vor dem Produktionseinsatz Herausgeber, Berechtigungen und Kompatibilität und ersetzen Sie `@latest` durch eine getestete exakte Version. Zum Entfernen UI stoppen und `dsh plugin --profile web remove @zseven-w/dsh-openpencil` ausführen. Ausführliche Entwicklungs-, Fehlerbehebungs- und Sicherheitshinweise stehen auf [Englisch](README.md#install-and-use-a-dsh-plugin-openpencil-example) und [Chinesisch](README_zh.md#安装与使用-dsh-pluginopenpencil-示例).
+
 ## Einen Agent mit DSH entwickeln
 
 1. Aufgabe, erlaubte Nebenwirkungen, Abschluss, Budget, Abbruch und Freigaben definieren.

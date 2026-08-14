@@ -57,6 +57,18 @@ Apri `http://127.0.0.1:3080`, configura il modello in **Settings → Models** e 
 dsh --profile web --dump-config
 ```
 
+## Installare e testare il Plugin OpenPencil
+
+Questo è l'esempio con versioni fissate della pagina di riferimento. Arresta la Web UI, verifica `op --version` e usa la stessa versione DSH per installazione, controllo, avvio e rimozione.
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+In una nuova Session richiedi la creazione e l'ispezione di un documento `.op`. Prima della produzione verifica autore, permessi e compatibilità e sostituisci `@latest` con una versione esatta testata. Per rimuoverlo, arresta la UI ed esegui `dsh plugin --profile web remove @zseven-w/dsh-openpencil`. La guida completa a sviluppo, diagnosi e sicurezza è disponibile in [inglese](README.md#install-and-use-a-dsh-plugin-openpencil-example) e [cinese](README_zh.md#安装与使用-dsh-pluginopenpencil-示例).
+
 ## Sviluppare un Agent con DSH
 
 1. Definire attività, effetti consentiti, completamento, budget, annullamento e approvazioni.

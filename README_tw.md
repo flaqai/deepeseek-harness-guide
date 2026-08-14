@@ -57,6 +57,18 @@ npx @deepseek-ai/dsh web
 dsh --profile web --dump-config
 ```
 
+## 安裝與測試 OpenPencil Plugin
+
+以下為參考頁面的版本固定示例；使用相同 DSH 版本完成安裝、檢查、啟動與移除。先停止 Web UI、確認 `op --version` 可執行，再運行：
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+在新 Session 中要求建立並檢查 `.op` 文件。正式使用前請核對來源、權限和相容性，並把 `@latest` 改成測試過的確切版本。移除時停止 UI，再執行 `dsh plugin --profile web remove @zseven-w/dsh-openpencil`。完整的開發、排障和安全說明見[中文指南](README_zh.md#安装与使用-dsh-pluginopenpencil-示例)或[英文指南](README.md#install-and-use-a-dsh-plugin-openpencil-example)。
+
 ## 基於 DSH 開發 Agent
 
 1. 定義任務邊界、允許的副作用、完成條件、預算、取消和人工審批。

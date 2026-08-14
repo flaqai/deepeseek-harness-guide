@@ -57,6 +57,18 @@ Buka `http://127.0.0.1:3080`, atur model di **Settings → Models**, lalu pilih 
 dsh --profile web --dump-config
 ```
 
+## Memasang dan menguji Plugin OpenPencil
+
+Ini adalah contoh versi tetap dari halaman referensi. Hentikan Web UI, pastikan `op --version` berhasil, lalu gunakan versi DSH yang sama untuk pemasangan, pemeriksaan, menjalankan, dan penghapusan.
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+Di Session baru, minta pembuatan dan pemeriksaan dokumen `.op`. Sebelum produksi, tinjau penerbit, izin, dan kompatibilitas, lalu ganti `@latest` dengan versi pasti yang telah diuji. Untuk menghapusnya, hentikan UI dan jalankan `dsh plugin --profile web remove @zseven-w/dsh-openpencil`. Panduan lengkap pengembangan, pemecahan masalah, dan keamanan tersedia dalam [bahasa Inggris](README.md#install-and-use-a-dsh-plugin-openpencil-example) dan [bahasa Tionghoa](README_zh.md#安装与使用-dsh-pluginopenpencil-示例).
+
 ## Mengembangkan Agent dengan DSH
 
 1. Tentukan tugas, efek yang diizinkan, penyelesaian, anggaran, pembatalan, dan persetujuan.

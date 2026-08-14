@@ -57,6 +57,18 @@ Mở `http://127.0.0.1:3080`, cấu hình mô hình trong **Settings → Models*
 dsh --profile web --dump-config
 ```
 
+## Cài đặt và thử nghiệm Plugin OpenPencil
+
+Đây là ví dụ đã cố định phiên bản từ trang tham khảo. Hãy dừng Web UI, xác nhận `op --version`, rồi dùng cùng một phiên bản DSH để cài đặt, kiểm tra, khởi động và gỡ bỏ.
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+Trong Session mới, yêu cầu tạo và kiểm tra tài liệu `.op`. Trước production, hãy kiểm tra nhà phát hành, quyền và khả năng tương thích, rồi thay `@latest` bằng phiên bản chính xác đã thử nghiệm. Để gỡ bỏ, dừng UI và chạy `dsh plugin --profile web remove @zseven-w/dsh-openpencil`. Xem hướng dẫn đầy đủ về phát triển, xử lý sự cố và bảo mật bằng [tiếng Anh](README.md#install-and-use-a-dsh-plugin-openpencil-example) hoặc [tiếng Trung](README_zh.md#安装与使用-dsh-pluginopenpencil-示例).
+
 ## Phát triển Agent với DSH
 
 1. Xác định nhiệm vụ, tác động được phép, điều kiện hoàn tất, ngân sách, hủy và phê duyệt.

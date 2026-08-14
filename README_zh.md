@@ -20,6 +20,7 @@ DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 **Agent Runtime 与组合�
 | 先弄清楚 DSH 是什么 | [什么是 DeepSeek Harness](#什么是-deepseek-harness) |
 | 理解整体技术架构 | [技术架构](#技术架构)与[完整技术指南](GUIDE_zh.md) |
 | 启动 Web UI 或使用 SDK | [快速使用](#快速使用)与[完整使用手册](USAGE_zh.md) |
+| 安装并测试 DSH 插件 | [OpenPencil 插件操作指南](#安装与使用-dsh-pluginopenpencil-示例) |
 | 基于 DSH 开发 Agent | [基于 DSH 开发 Agent](#基于-dsh-开发-agent) |
 | 开发或发布插件 | [选择正确的扩展方式](#选择正确的扩展方式)与[官方插件教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md) |
 | 让编码 Agent 协助开发 | [实用 Agent Skills](#实用-agent-skills) |
@@ -30,6 +31,7 @@ DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 **Agent Runtime 与组合�
 - [什么是 DeepSeek Harness](#什么是-deepseek-harness)
 - [技术架构](#技术架构)
 - [快速使用](#快速使用)
+- [安装与使用 DSH Plugin：OpenPencil 示例](#安装与使用-dsh-pluginopenpencil-示例)
 - [基于 DSH 开发 Agent](#基于-dsh-开发-agent)
 - [选择正确的扩展方式](#选择正确的扩展方式)
 - [本项目文档地图](#本项目文档地图)
@@ -144,6 +146,118 @@ pnpm dsh web
 ```
 
 官方还提供用于程序化嵌入的 Python SDK。SDK 配置、插件安装、回滚和排障流程见[完整使用手册](USAGE_zh.md)。
+
+## 安装与使用 DSH Plugin：OpenPencil 示例
+
+下面把参考页面中的 OpenPencil 流程整理成一套可以检查、回滚的 Plugin 操作指南。在 DSH 中，**Plugin** 提供运行时代码，**Bundle** 通过 `dsh.bundle` 分发配置层，**Profile** 则为一个可运行环境选择有序 Bundle 和本地配置。因此，把 Package 安装到 `web` 只会改变该 Profile，不会修改所有 DSH 环境。
+
+> [!NOTE]
+> 参考示例把 DSH 固定在 `0.1.0-rc.6`，但插件使用了 `@latest`。下面命令应视为当时的可复现实例，不代表当前版本一定兼容。安装、检查、启动和移除必须使用同一 DSH 版本；验证成功后，也应把插件固定到明确版本。
+
+### 1. 检查前置条件
+
+- 在 DSH 中配置支持工具调用的模型 Provider；可以选用已配置的 flaq.ai 模型，但 OpenPencil 本质上是 Tool Plugin，并非只能配合 Flaq 使用。
+- 修改 `web` Profile 前，先停止正在运行的 Web UI。
+- 按 [OpenPencil 官方仓库](https://github.com/ZSeven-W/openpencil)说明安装命令行程序，并用 `op --version` 确认当前 Shell 可以找到 `op`。
+- 在同一项目环境运行全部命令，避免它们解析到不同的 DSH Home 或 `web` Profile。
+
+### 2. 把插件安装到 Web Profile
+
+参考示例使用公开的 OpenPencil Plugin Package：
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+```
+
+生产环境或共享开发环境使用前，应核对 Package 发布者、源码仓库、发布说明、权限、安装脚本和兼容范围，并把 `@latest` 替换为实际测试过的精确版本。
+
+### 3. 检查最终配置
+
+启动界面前，确认目标 Bundle 和 Plugin 配置行已经进入最终组合：
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+```
+
+`--dump-config` 展示 Bundle Patch、Profile Patch、Home Patch 和命令行 Patch 依次合并后的结果。如果找不到插件，应检查 Profile 是否正确，以及各条命令是否使用同一个 DSH Home。
+
+### 4. 重启并测试
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+打开 Web UI，选择已经配置的模型和工作区，新建 Session，然后发送一个边界清晰的测试任务：
+
+```text
+创建一个可编辑的 OpenPencil 文档，包含标题、副标题和两个功能卡片。
+保存为 harness-guide.op，检查该文档，并总结它的图层结构。
+```
+
+正常情况下，模型应该能看到 OpenPencil Tools，创建 `.op` 文档，并返回可以检查或编辑的结果。首次运行请使用临时工作区，并在批准前检查模型准备执行的 Tool Call。
+
+### 5. 移除与回滚
+
+停止 Web UI，从同一 Profile 移除 Package，再次检查配置，然后重启：
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web remove @zseven-w/dsh-openpencil
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+```
+
+如果升级失败，应恢复上一组验证通过的 DSH 与 Plugin 版本，不要同时修改两者后再排查。
+
+### 常见问题
+
+| 现象 | 检查项 |
+|---|---|
+| UI 中找不到插件 | 停止并重启 UI；检查 DSH 版本、Profile、DSH Home 和 `--dump-config` 输出。 |
+| OpenPencil Tools 没有注册 | 确认 Bundle 已挂载 Plugin，并且其 `tools` 依赖已经可用。 |
+| 找不到 `op` | 安装 OpenPencil CLI，修正 `PATH`，确认 `op --version` 成功后重启 DSH。 |
+| 安装被构建脚本策略拦截 | 先审查依赖和脚本，只允许可信 Package 执行构建脚本。 |
+| 选择模型后 Tool Call 失败 | 确认 Provider 支持工具调用以及所需请求、Schema 和流式行为。 |
+| 升级后插件失效 | 回退到上一组已测试版本，阅读上游发布说明，再逐个组件升级。 |
+
+### 从使用插件到开发插件
+
+一个职责单一的 DSH Tool Plugin 可以从下面的生命周期安全结构开始：
+
+```ts
+import type { Context } from '@deepseek-ai/cordis'
+import { defineTool } from '@deepseek-ai/dsh-tools'
+
+export const name = 'example-tool'
+export const inject = ['tools']
+
+export function apply(ctx: Context) {
+  ctx.tools.register(defineTool({
+    name: 'echo_text',
+    description: 'Return text for a connectivity test.',
+    parameters: {
+      text: { type: 'string', required: true, description: 'Text to return.' },
+    },
+    output: {
+      schema: { type: 'string' },
+      render: (_args, value) => [{ type: 'text', text: value }],
+    },
+    async execute({ text }) {
+      return text
+    },
+  }))
+}
+```
+
+开发时重点遵守以下规则：
+
+1. 通过 `inject` 声明消费的 Service，让依赖就绪后再挂载插件；
+2. 使用严格的 `parameters`，校验所有外部输入；
+3. 让 `execute` 返回规范化结果，通过 `output.render` 生成模型可见内容；
+4. 通过所属 Context 注册 Tool、定时器和监听器，使 Fiber 卸载时能自动清理资源；
+5. 先使用 Patch 本地测试，再通过 `dsh.bundle` 把配置打包为 Bundle；
+6. 安装进一次性 Profile，检查 `--dump-config`，并测试加载、拒绝、取消、卸载、重新挂载、移除和回滚；
+7. 固定 Git/Package 依赖并审查生命周期脚本，因为安装脚本在 Agent 沙箱之外执行。
+
+接下来可阅读[官方首个插件教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.zh.md)、[Tool 教程](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.zh.md)、[插件打包指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)，并使用本仓库的 [`dsh-plugin-scaffold`](skills/dsh-plugin-scaffold/) 和 [`dsh-tool-builder`](skills/dsh-tool-builder/) Skills。
 
 ## 基于 DSH 开发 Agent
 

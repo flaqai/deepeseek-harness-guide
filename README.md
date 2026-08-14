@@ -20,6 +20,7 @@ This repository explains that system in practical terms. It is an independent co
 | Understand what DSH is | [What is DeepSeek Harness?](#what-is-deepseek-harness) |
 | Understand the architecture | [Architecture](#architecture) and the [technical guide](GUIDE.md) |
 | Run the Web UI or SDK | [Quick start](#quick-start) and the [usage handbook](USAGE.md) |
+| Install and test a DSH plugin | [OpenPencil plugin walkthrough](#install-and-use-a-dsh-plugin-openpencil-example) |
 | Build an agent on DSH | [Develop an agent with DSH](#develop-an-agent-with-dsh) |
 | Build or package a plugin | [Extension model](#choose-the-right-extension) and the [official plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md) |
 | Let a coding agent help with DSH | [Reusable Agent Skills](#reusable-agent-skills) |
@@ -30,6 +31,7 @@ This repository explains that system in practical terms. It is an independent co
 - [What is DeepSeek Harness?](#what-is-deepseek-harness)
 - [Architecture](#architecture)
 - [Quick start](#quick-start)
+- [Install and use a DSH Plugin: OpenPencil example](#install-and-use-a-dsh-plugin-openpencil-example)
 - [Develop an agent with DSH](#develop-an-agent-with-dsh)
 - [Choose the right extension](#choose-the-right-extension)
 - [Documentation map](#documentation-map)
@@ -144,6 +146,119 @@ pnpm dsh web
 ```
 
 Programmatic embedding is also available through the official Python SDK. See the [usage handbook](USAGE.md) for SDK setup, plugin installation, rollback, and troubleshooting.
+
+## Install and use a DSH Plugin: OpenPencil example
+
+This walkthrough turns the OpenPencil flow shown in the referenced guide into a reproducible plugin workflow. In DSH, a **Plugin** provides runtime behavior, a **Bundle** distributes a configuration layer through `dsh.bundle`, and a **Profile** selects ordered Bundles and local configuration for one runnable environment. Installing a package into `web` therefore changes that Profile; it does not modify every DSH installation.
+
+> [!NOTE]
+> The referenced example pins DSH to `0.1.0-rc.6` but installs the plugin with `@latest`. Treat the commands below as a tested snapshot, not a promise of current compatibility. Use the same DSH version for installation, inspection, startup, and removal; after validation, pin the plugin to an exact version as well.
+
+### 1. Check the prerequisites
+
+- Configure a tool-calling model provider in DSH. A configured flaq.ai model can be used, but OpenPencil is a tool plugin rather than a Flaq-only integration.
+- Stop the running Web UI before changing its Profile.
+- Install OpenPencil from its [official repository](https://github.com/ZSeven-W/openpencil) and confirm that its `op` executable is visible to the shell with `op --version`.
+- Run all commands from the same project environment so they resolve the same DSH home and `web` Profile.
+
+### 2. Install the plugin into the Web Profile
+
+The referenced example uses the public OpenPencil plugin package:
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web add @zseven-w/dsh-openpencil@latest
+```
+
+For production or shared development environments, first verify the package publisher, source repository, release notes, requested permissions, install scripts, and compatibility range. Replace `@latest` with the exact version you tested.
+
+### 3. Inspect the effective configuration
+
+Before starting the UI, confirm that the expected Bundle and plugin rows are present:
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+```
+
+`--dump-config` shows the final ordered composition after Bundle patches, the Profile patch, home-level patches, and command-line patches. If the plugin is absent, check the selected Profile and whether every command is resolving the same DSH home.
+
+### 4. Restart and test
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh web
+```
+
+Open the Web UI, select the configured model and workspace, create a new session, and try a bounded request such as:
+
+```text
+Create a simple editable OpenPencil document with a title, a subtitle,
+and two feature cards. Save it as harness-guide.op, inspect the document,
+and summarize its layers.
+```
+
+A successful run should expose the OpenPencil tools to the model, create an `.op` document, and return an inspectable or editable result. Review the proposed tool call before approval and start in a disposable workspace.
+
+### 5. Remove or roll back
+
+Stop the Web UI, remove the package from the same Profile, inspect the composition again, and restart:
+
+```bash
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh plugin --profile web remove @zseven-w/dsh-openpencil
+npx --yes -p @deepseek-ai/dsh@0.1.0-rc.6 dsh --profile web --dump-config
+```
+
+If an upgrade fails, restore the previously tested DSH and plugin versions instead of changing both at once.
+
+### Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| Plugin is missing from the UI | Stop and restart the UI; confirm the DSH version, Profile, DSH home, and `--dump-config` output. |
+| OpenPencil tools are not registered | Confirm that the Bundle mounted the plugin and that its `tools` dependency is available. |
+| `op` cannot be found | Install the OpenPencil CLI, fix `PATH`, verify `op --version`, then restart DSH. |
+| Installation is blocked by build-script policy | Inspect the dependency and its scripts first; allow build scripts only for packages you trust. |
+| Tool calls fail after model selection | Verify that the provider supports tool calling and the required request, schema, and streaming behavior. |
+| An upgrade breaks the plugin | Revert to the last tested pair, inspect upstream release notes, then upgrade one component at a time. |
+
+### From using a plugin to developing one
+
+A focused DSH Tool plugin follows a small lifecycle-aware contract:
+
+```ts
+import type { Context } from '@deepseek-ai/cordis'
+import { defineTool } from '@deepseek-ai/dsh-tools'
+
+export const name = 'example-tool'
+export const inject = ['tools']
+
+export function apply(ctx: Context) {
+  ctx.tools.register(defineTool({
+    name: 'echo_text',
+    description: 'Return text for a connectivity test.',
+    parameters: {
+      text: { type: 'string', required: true, description: 'Text to return.' },
+    },
+    output: {
+      schema: { type: 'string' },
+      render: (_args, value) => [{ type: 'text', text: value }],
+    },
+    async execute({ text }) {
+      return text
+    },
+  }))
+}
+```
+
+The important design rules are:
+
+1. declare consumed Services with `inject` so the plugin mounts only when its dependencies are ready;
+2. keep `parameters` strict and validate all external input;
+3. let `execute` return the canonical result and use `output.render` to create model-facing content;
+4. register timers, listeners, tools, and other resources through the owning Context so unload cleans them up;
+5. test locally with a Patch, then package the configuration as a Bundle using `dsh.bundle`;
+6. install into a disposable Profile, inspect `--dump-config`, and test load, denial, cancellation, unload, remount, removal, and rollback;
+7. pin Git/package dependencies and review lifecycle scripts because installation scripts execute outside the Agent sandbox.
+
+Continue with the [official first-plugin tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/index.md), [Tool tutorial](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/tool.md), [plugin packaging guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md), and this repository's [`dsh-plugin-scaffold`](skills/dsh-plugin-scaffold/) and [`dsh-tool-builder`](skills/dsh-tool-builder/) Skills.
 
 ## Develop an agent with DSH
 
