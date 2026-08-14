@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [Baca panduan arsitektur teknis →](GUIDE_id.md)
+
 > Panduan komunitas multibahasa untuk memahami, memperluas, dan membangun plugin bagi [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
 DeepSeek Harness (`dsh`) adalah agent harness sumber terbuka yang dikembangkan oleh DeepSeek AI. Gagasan utamanya: **semuanya adalah plugin**. Adaptor model, alat, agent loop, penyimpanan sesi, izin, sandbox, telemetri, dan antarmuka dapat disusun atau diganti melalui konfigurasi.

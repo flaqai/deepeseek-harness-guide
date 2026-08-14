@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [阅读技术架构指南 →](GUIDE_zh.md)
+
 > 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 理解、扩展与插件开发的社区多语言指南。
 
 DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的智能体 Harness。它最核心的设计理念是：**一切皆插件（Everything is a Plugin）**。模型适配器、工具、智能体循环、会话存储、权限、沙箱、遥测和用户界面，都可以通过配置进行组合或替换。
@@ -161,6 +163,21 @@ pnpm dsh web --patch ./cordis.patch.yml
 ## 参与贡献
 
 欢迎提交勘误、翻译、示例、插件案例和可复用 Skill。请让关键结论链接到官方源码或可复现代码；对预览 API 做清晰标注；示例中不要包含真实凭证。
+
+- [技术指南](GUIDE_zh.md)
+- [贡献规范](CONTRIBUTING_zh.md)
+- [项目路线图](ROADMAP_zh.md)
+
+当前文档结构：
+
+```text
+deepeseek-harness-guide/
+├── README*.md        # 项目介绍与语言入口
+├── GUIDE*.md         # 多语言技术架构指南
+├── CONTRIBUTING*.md  # 信息来源、审查与翻译规范
+├── ROADMAP*.md       # 分阶段项目演进计划
+└── LICENSE
+```
 
 ## 许可证
 

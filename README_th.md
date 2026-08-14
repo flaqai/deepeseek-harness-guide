@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [อ่านคู่มือสถาปัตยกรรมเชิงเทคนิค →](GUIDE_th.md)
+
 > คู่มือหลายภาษาที่ดูแลโดยชุมชนสำหรับทำความเข้าใจ ขยายความสามารถ และสร้างปลั๊กอินให้ [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 
 DeepSeek Harness (`dsh`) คือ agent harness แบบโอเพนซอร์สที่พัฒนาโดย DeepSeek AI แนวคิดหลักคือ **ทุกอย่างเป็นปลั๊กอิน** ทั้งตัวเชื่อมต่อโมเดล เครื่องมือ วงจรของเอเจนต์ การเก็บเซสชัน สิทธิ์ แซนด์บ็อกซ์ เทเลเมทรี และส่วนติดต่อผู้ใช้ สามารถประกอบหรือแทนที่ผ่านการกำหนดค่าได้

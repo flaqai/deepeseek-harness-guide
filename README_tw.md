@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [閱讀技術架構指南 →](GUIDE_tw.md)
+
 > 一份協助你理解、擴充並為 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 開發外掛的社群多語言指南。
 
 DeepSeek Harness（`dsh`）是 DeepSeek AI 開源的 Agent Harness。它的核心理念是：**一切皆外掛**。模型介面卡、工具、Agent Loop、工作階段儲存、權限、沙箱、遙測與使用者介面，都能透過設定進行組合或替換。

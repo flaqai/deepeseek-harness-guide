@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [技術アーキテクチャガイドを読む →](GUIDE_ja.md)
+
 > [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) の理解、拡張、プラグイン開発を支援するコミュニティ運営の多言語ガイドです。
 
 DeepSeek Harness（`dsh`）は、DeepSeek AI が公開したオープンソースのエージェントハーネスです。中心となる考え方は **「すべてがプラグイン」**。モデルアダプター、ツール、エージェントループ、セッション保存、権限、サンドボックス、テレメトリー、UI を設定によって構成・交換できます。

@@ -2,6 +2,8 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
+📘 [Read the technical architecture guide →](GUIDE.md)
+
 > A community-maintained, multilingual guide to understanding, extending, and building plugins for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
 DeepSeek Harness (`dsh`) is an open-source agent harness developed by DeepSeek AI. Its central idea is unusually strong: **everything is a plugin**. Model adapters, tools, the agent loop, session storage, permissions, sandboxing, telemetry, and user interfaces can all be composed or replaced through configuration.
@@ -163,6 +165,21 @@ Each future Skill will state when to use it, required context, ordered steps, sa
 ## Contributing
 
 Contributions are welcome: corrections, translations, examples, plugin case studies, and reusable Skills. Keep claims linked to official source or reproducible code, clearly label preview APIs, and never include real credentials in examples.
+
+- [Technical guide](GUIDE.md)
+- [Contribution guide](CONTRIBUTING.md)
+- [Project roadmap](ROADMAP.md)
+
+Current documentation layout:
+
+```text
+deepeseek-harness-guide/
+├── README*.md        # introductions and language entry points
+├── GUIDE*.md         # multilingual technical architecture guides
+├── CONTRIBUTING*.md  # source, review, and translation policy
+├── ROADMAP*.md       # staged project evolution
+└── LICENSE
+```
 
 ## License
 
