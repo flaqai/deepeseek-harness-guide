@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [อ่านคู่มือสถาปัตยกรรมเชิงเทคนิค →](GUIDE_th.md)
+📘 [สถาปัตยกรรมเชิงเทคนิค →](GUIDE_th.md) · [คู่มือการใช้งาน →](USAGE_th.md) · [Skills ที่ใช้งานได้ →](skills/)
 
 > คู่มือหลายภาษาที่ดูแลโดยชุมชนสำหรับทำความเข้าใจ ขยายความสามารถ และสร้างปลั๊กอินให้ [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)
 
@@ -42,9 +42,9 @@ Web UI เปิดที่ `http://127.0.0.1:3080` โดยค่าเริ
 - Cordis, วงจรชีวิตปลั๊กอิน, dependency injection และ effect ที่ย้อนกลับได้
 - ปลั๊กอินสำหรับเครื่องมือ โมเดล แซนด์บ็อกซ์ พื้นที่จัดเก็บ เอเจนต์ย่อย และ Web UI
 - Bundles, Profiles, `cordis.patch.yml`, การทดสอบ การเผยแพร่ และความปลอดภัย
-- Agent Skills ที่วางแผนไว้: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` และ `dsh-plugin-review`
+- Agent Skills ที่มีให้ใช้: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` และ `dsh-plugin-review`
 
-**Skill** ในที่นี้หมายถึงขั้นตอนการทำงานที่ใช้ซ้ำได้สำหรับเอเจนต์เขียนโค้ด ไม่ใช่ **Plugin** ที่ทำงานใน DeepSeek Harness โดย Skills ข้างต้นยังไม่เผยแพร่
+**Skill** ในที่นี้หมายถึงขั้นตอนการทำงานที่ใช้ซ้ำได้สำหรับเอเจนต์เขียนโค้ด ไม่ใช่ **Plugin** ที่ทำงานใน DeepSeek Harness โดย Skills อยู่ใน [`skills/`](skills/)
 
 ## แหล่งข้อมูลอย่างเป็นทางการ
 

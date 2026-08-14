@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [閱讀技術架構指南 →](GUIDE_tw.md)
+📘 [技術架構 →](GUIDE_tw.md) · [使用手冊 →](USAGE_tw.md) · [實用 Skills →](skills/)
 
 > 一份協助你理解、擴充並為 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 開發外掛的社群多語言指南。
 
@@ -42,9 +42,9 @@ Web UI 預設位於 `http://127.0.0.1:3080`。在 **Settings → Models** 新增
 - Cordis、外掛生命週期、依賴注入與可逆 Effect。
 - 工具、模型、沙箱、儲存、子 Agent 與 Web UI 外掛。
 - Bundle、Profile、`cordis.patch.yml`、測試、發布與安全性。
-- 規劃中的 Agent Skills：`dsh-repository-explorer`、`dsh-plugin-scaffold`、`dsh-tool-builder` 與 `dsh-plugin-review`。
+- 已提供的 Agent Skills：`dsh-repository-explorer`、`dsh-plugin-scaffold`、`dsh-tool-builder` 與 `dsh-plugin-review`。
 
-這裡的 **Skill** 是給 AI 編碼助手使用的可重複工作流程，與 DeepSeek Harness 執行階段的 **Plugin** 不同。上述 Skills 尚未發布。
+這裡的 **Skill** 是給 AI 編碼助手使用的可重複工作流程，與 DeepSeek Harness 執行階段的 **Plugin** 不同。上述 Skills 位於 [`skills/`](skills/)。
 
 ## 官方資源
 

@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Ler o guia técnico de arquitetura →](GUIDE_pt.md)
+📘 [Arquitetura técnica →](GUIDE_pt.md) · [Manual de uso →](USAGE_pt.md) · [Skills práticos →](skills/)
 
 > Um guia comunitário e multilíngue para entender, estender e criar plugins para o [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
@@ -42,9 +42,9 @@ A interface Web é servida por padrão em `http://127.0.0.1:3080`. Adicione cred
 - Cordis, ciclo de vida de plugins, injeção de dependências e efeitos reversíveis.
 - Plugins de ferramentas, modelos, sandbox, armazenamento, subagentes e Web UI.
 - Bundles, Profiles, `cordis.patch.yml`, testes, publicação e segurança.
-- Agent Skills planejadas: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` e `dsh-plugin-review`.
+- Agent Skills disponíveis: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` e `dsh-plugin-review`.
 
-Aqui, uma **Skill** é um fluxo reutilizável de instruções para agentes de programação; não é o mesmo que um **Plugin** de runtime do DeepSeek Harness. Essas Skills ainda não foram publicadas.
+Aqui, uma **Skill** é um fluxo reutilizável de instruções para agentes de programação; não é o mesmo que um **Plugin** de runtime do DeepSeek Harness. Essas Skills estão em [`skills/`](skills/).
 
 ## Recursos oficiais
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Plugin Review"
+  short_description: "Review DSH plugins for lifecycle and security risks"
+  default_prompt: "Use $dsh-plugin-review to audit this DeepSeek Harness plugin."

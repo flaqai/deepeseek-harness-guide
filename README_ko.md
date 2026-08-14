@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [기술 아키텍처 가이드 읽기 →](GUIDE_ko.md)
+📘 [기술 아키텍처 →](GUIDE_ko.md) · [사용 안내서 →](USAGE_ko.md) · [실용 Skills →](skills/)
 
 > [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)를 이해하고 확장하며 플러그인을 개발하기 위한 커뮤니티 다국어 가이드입니다.
 
@@ -42,9 +42,9 @@ Web UI는 기본적으로 `http://127.0.0.1:3080`에서 열립니다. **Settings
 - Cordis, 플러그인 수명 주기, 의존성 주입, 되돌릴 수 있는 Effect.
 - 도구, 모델, 샌드박스, 저장소, 서브에이전트, Web UI 플러그인.
 - Bundle, Profile, `cordis.patch.yml`, 테스트, 배포, 보안.
-- 계획 중인 Agent Skills: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder`, `dsh-plugin-review`.
+- 제공되는 Agent Skills: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder`, `dsh-plugin-review`.
 
-여기서 **Skill**은 AI 코딩 에이전트를 위한 재사용 가능한 작업 절차이며, DeepSeek Harness 런타임 **Plugin**과는 다릅니다. 위 Skills는 아직 배포되지 않았습니다.
+여기서 **Skill**은 AI 코딩 에이전트를 위한 재사용 가능한 작업 절차이며, DeepSeek Harness 런타임 **Plugin**과는 다릅니다. 위 Skills는 [`skills/`](skills/)에 있습니다.
 
 ## 공식 자료
 

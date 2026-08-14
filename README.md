@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Read the technical architecture guide →](GUIDE.md)
+📘 [Technical architecture →](GUIDE.md) · [Usage handbook →](USAGE.md) · [Reusable Skills →](skills/)
 
 > A community-maintained, multilingual guide to understanding, extending, and building plugins for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
@@ -128,9 +128,9 @@ Real plugins should also declare consumed services through `inject`, expose conf
 | UI | Domain-specific panels, settings, tool-result cards | client plugins and remote APIs |
 | Governance | Approval policy, redaction, telemetry, cost controls | policy and telemetry events |
 
-## Planned agent Skills
+## Included agent Skills
 
-In this guide, a **Skill** means a reusable instruction workflow for AI coding agents; it is not the same thing as a DeepSeek Harness runtime plugin. The following Skills are planned and are **not yet shipped**:
+In this guide, a **Skill** means a reusable instruction workflow for AI coding agents; it is not the same thing as a DeepSeek Harness runtime plugin. The following Skills are available under [`skills/`](skills/):
 
 | Skill | Intended use |
 | --- | --- |
@@ -139,7 +139,7 @@ In this guide, a **Skill** means a reusable instruction workflow for AI coding a
 | `dsh-tool-builder` | Build a typed tool with validation, rendering, policy hooks, and lifecycle-safe registration. |
 | `dsh-plugin-review` | Review dependency injection, effect cleanup, permissions, secrets, packaging, and compatibility risk. |
 
-Each future Skill will state when to use it, required context, ordered steps, safety boundaries, verification, and links to the corresponding official contract.
+Each Skill states when to use it, its ordered workflow, safety boundaries, completion checks, and links to the corresponding official contracts.
 
 ## Recommended learning path
 
@@ -167,6 +167,8 @@ Each future Skill will state when to use it, required context, ordered steps, sa
 Contributions are welcome: corrections, translations, examples, plugin case studies, and reusable Skills. Keep claims linked to official source or reproducible code, clearly label preview APIs, and never include real credentials in examples.
 
 - [Technical guide](GUIDE.md)
+- [Usage handbook](USAGE.md)
+- [Reusable Skills](skills/)
 - [Contribution guide](CONTRIBUTING.md)
 - [Project roadmap](ROADMAP.md)
 
@@ -176,6 +178,8 @@ Current documentation layout:
 deepeseek-harness-guide/
 ├── README*.md        # introductions and language entry points
 ├── GUIDE*.md         # multilingual technical architecture guides
+├── USAGE*.md         # multilingual operations and module handbook
+├── skills/           # reusable coding-agent workflows for DSH work
 ├── CONTRIBUTING*.md  # source, review, and translation policy
 ├── ROADMAP*.md       # staged project evolution
 └── LICENSE

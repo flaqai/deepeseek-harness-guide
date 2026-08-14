@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Repository Explorer"
+  short_description: "Map DeepSeek Harness architecture before changing code"
+  default_prompt: "Use $dsh-repository-explorer to map this DeepSeek Harness change."

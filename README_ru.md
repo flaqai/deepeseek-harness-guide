@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Открыть техническое руководство →](GUIDE_ru.md)
+📘 [Техническая архитектура →](GUIDE_ru.md) · [Руководство по использованию →](USAGE_ru.md) · [Практические Skills →](skills/)
 
 > Многоязычное руководство сообщества по устройству, расширению и разработке плагинов для [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
@@ -42,9 +42,9 @@ npx @deepseek-ai/dsh web
 - Cordis, жизненный цикл плагинов, внедрение зависимостей и обратимые эффекты.
 - Плагины инструментов, моделей, песочниц, хранения, субагентов и Web UI.
 - Bundles, Profiles, `cordis.patch.yml`, тестирование, публикация и безопасность.
-- Планируемые Agent Skills: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` и `dsh-plugin-review`.
+- Доступные Agent Skills: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` и `dsh-plugin-review`.
 
-Здесь **Skill** — повторно используемый рабочий процесс для ИИ-агента разработки, а не runtime-**Plugin** DeepSeek Harness. Перечисленные Skills пока не опубликованы.
+Здесь **Skill** — повторно используемый рабочий процесс для ИИ-агента разработки, а не runtime-**Plugin** DeepSeek Harness. Эти Skills находятся в [`skills/`](skills/).
 
 ## Официальные ресурсы
 

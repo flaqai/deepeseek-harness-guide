@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Tool Builder"
+  short_description: "Build typed and policy-aware DSH tools safely"
+  default_prompt: "Use $dsh-tool-builder to add a typed DeepSeek Harness tool."

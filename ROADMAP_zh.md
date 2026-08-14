@@ -38,10 +38,10 @@
 
 ## 第五阶段：可复用 Agent Skill
 
-- [ ] `dsh-repository-explorer`
-- [ ] `dsh-plugin-scaffold`
-- [ ] `dsh-tool-builder`
-- [ ] `dsh-plugin-review`
+- [x] `dsh-repository-explorer`
+- [x] `dsh-plugin-scaffold`
+- [x] `dsh-tool-builder`
+- [x] `dsh-plugin-review`
 
 每个 Skill 必须包含触发条件、前置要求、有序工作流、安全边界、验证步骤，并链接到对应官方契约。
 
@@ -53,4 +53,3 @@
 - [ ] 用实测证据比较本地、远程和沙箱 Capability Provider。
 
 本路线图用于表达方向，不构成兼容性承诺。优先级会随 DeepSeek Harness 演进而调整。
-

@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [اقرأ دليل البنية التقني →](GUIDE_ar.md)
+📘 [البنية التقنية →](GUIDE_ar.md) · [دليل الاستخدام →](USAGE_ar.md) · [Skills عملية →](skills/)
 
 > دليل مجتمعي متعدد اللغات لفهم [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) وتوسيعه وبناء الإضافات له.
 

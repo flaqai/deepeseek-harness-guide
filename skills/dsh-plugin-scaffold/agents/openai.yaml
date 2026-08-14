@@ -1,0 +1,4 @@
+interface:
+  display_name: "DSH Plugin Scaffold"
+  short_description: "Scaffold lifecycle-safe DeepSeek Harness plugins"
+  default_prompt: "Use $dsh-plugin-scaffold to create a DeepSeek Harness plugin."

@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Đọc hướng dẫn kiến trúc kỹ thuật →](GUIDE_vi.md)
+📘 [Kiến trúc kỹ thuật →](GUIDE_vi.md) · [Hướng dẫn sử dụng →](USAGE_vi.md) · [Skills thực dụng →](skills/)
 
 > Hướng dẫn cộng đồng đa ngôn ngữ để tìm hiểu, mở rộng và xây dựng plugin cho [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
@@ -42,9 +42,9 @@ Web UI mặc định chạy tại `http://127.0.0.1:3080`. Thêm thông tin xác
 - Cordis, vòng đời plugin, dependency injection và effect có thể đảo ngược.
 - Plugin cho công cụ, mô hình, sandbox, lưu trữ, subagent và Web UI.
 - Bundles, Profiles, `cordis.patch.yml`, kiểm thử, phát hành và bảo mật.
-- Agent Skills dự kiến: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` và `dsh-plugin-review`.
+- Agent Skills có sẵn: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder` và `dsh-plugin-review`.
 
-Ở đây, **Skill** là quy trình hướng dẫn có thể tái sử dụng cho agent lập trình, không phải **Plugin** runtime của DeepSeek Harness. Các Skills trên chưa được phát hành.
+Ở đây, **Skill** là quy trình hướng dẫn có thể tái sử dụng cho agent lập trình, không phải **Plugin** runtime của DeepSeek Harness. Các Skills nằm trong [`skills/`](skills/).
 
 ## Tài nguyên chính thức
 

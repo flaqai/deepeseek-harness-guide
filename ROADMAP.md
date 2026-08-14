@@ -38,10 +38,10 @@ This roadmap favors small, source-backed, reviewable additions over a large spec
 
 ## Phase 5 — Reusable Agent Skills
 
-- [ ] `dsh-repository-explorer`
-- [ ] `dsh-plugin-scaffold`
-- [ ] `dsh-tool-builder`
-- [ ] `dsh-plugin-review`
+- [x] `dsh-repository-explorer`
+- [x] `dsh-plugin-scaffold`
+- [x] `dsh-tool-builder`
+- [x] `dsh-plugin-review`
 
 Each Skill must contain trigger guidance, prerequisites, an ordered workflow, safety boundaries, verification steps, and links to the matching official contract.
 
@@ -53,4 +53,3 @@ Each Skill must contain trigger guidance, prerequisites, an ordered workflow, sa
 - [ ] Compare local, remote, and sandboxed capability providers with measured evidence.
 
 The roadmap is directional, not a compatibility promise. Priorities may change as DeepSeek Harness evolves.
-

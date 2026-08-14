@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [Baca panduan arsitektur teknis →](GUIDE_id.md)
+📘 [Arsitektur teknis →](GUIDE_id.md) · [Panduan penggunaan →](USAGE_id.md) · [Skills praktis →](skills/)
 
 > Panduan komunitas multibahasa untuk memahami, memperluas, dan membangun plugin bagi [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness).
 
@@ -42,9 +42,9 @@ Web UI tersedia di `http://127.0.0.1:3080` secara default. Tambahkan kredensial 
 - Cordis, siklus hidup plugin, dependency injection, dan effect yang dapat dibalik.
 - Plugin alat, model, sandbox, penyimpanan, subagen, dan Web UI.
 - Bundles, Profiles, `cordis.patch.yml`, pengujian, publikasi, dan keamanan.
-- Agent Skills yang direncanakan: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder`, dan `dsh-plugin-review`.
+- Agent Skills yang tersedia: `dsh-repository-explorer`, `dsh-plugin-scaffold`, `dsh-tool-builder`, dan `dsh-plugin-review`.
 
-Di sini, **Skill** adalah alur instruksi yang dapat digunakan kembali oleh agen coding, bukan **Plugin** runtime DeepSeek Harness. Skills tersebut belum dirilis.
+Di sini, **Skill** adalah alur instruksi yang dapat digunakan kembali oleh agen coding, bukan **Plugin** runtime DeepSeek Harness. Skills tersebut tersedia di [`skills/`](skills/).
 
 ## Sumber resmi
 

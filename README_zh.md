@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README_zh.md) | [繁體中文](README_tw.md) | [日本語](README_ja.md) | [한국어](README_ko.md) | [Deutsch](README_de.md) | [Español](README_es.md) | [Français](README_fr.md) | [Italiano](README_it.md) | [Português](README_pt.md) | [Русский](README_ru.md) | [العربية](README_ar.md) | [Bahasa Indonesia](README_id.md) | [ไทย](README_th.md) | [Tiếng Việt](README_vi.md)
 
-📘 [阅读技术架构指南 →](GUIDE_zh.md)
+📘 [技术架构 →](GUIDE_zh.md) · [使用手册 →](USAGE_zh.md) · [实用 Skills →](skills/)
 
 > 面向 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 理解、扩展与插件开发的社区多语言指南。
 
@@ -126,9 +126,9 @@ pnpm dsh web --patch ./cordis.patch.yml
 | 界面 | 垂直领域面板、设置页、工具结果卡片 | Client Plugin 与远程 API |
 | 治理 | 审批策略、脱敏、遥测、成本控制 | Policy 与 Telemetry Event |
 
-## 规划中的 Agent Skills
+## 已提供的 Agent Skills
 
-本指南里的 **Skill** 指 AI 编码助手可复用的指令工作流，和 DeepSeek Harness 运行时 **Plugin** 不是同一个概念。以下 Skill 目前处于规划阶段，**尚未发布**：
+本指南里的 **Skill** 指 AI 编码助手可复用的指令工作流，和 DeepSeek Harness 运行时 **Plugin** 不是同一个概念。以下 Skill 已在 [`skills/`](skills/) 提供：
 
 | Skill | 用途 |
 | --- | --- |
@@ -137,7 +137,7 @@ pnpm dsh web --patch ./cordis.patch.yml
 | `dsh-tool-builder` | 构建带校验、渲染、策略钩子和生命周期安全注册的类型化工具。 |
 | `dsh-plugin-review` | 审查依赖注入、副作用清理、权限、密钥、打包方式和兼容性风险。 |
 
-未来每个 Skill 都会明确触发场景、前置上下文、执行步骤、安全边界、验证方法，并链接到对应的官方契约。
+每个 Skill 都明确了触发场景、执行步骤、安全边界、完成检查，并链接到对应的官方契约。
 
 ## 推荐学习路径
 
@@ -165,6 +165,8 @@ pnpm dsh web --patch ./cordis.patch.yml
 欢迎提交勘误、翻译、示例、插件案例和可复用 Skill。请让关键结论链接到官方源码或可复现代码；对预览 API 做清晰标注；示例中不要包含真实凭证。
 
 - [技术指南](GUIDE_zh.md)
+- [使用手册](USAGE_zh.md)
+- [实用 Skills](skills/)
 - [贡献规范](CONTRIBUTING_zh.md)
 - [项目路线图](ROADMAP_zh.md)
 
@@ -174,6 +176,8 @@ pnpm dsh web --patch ./cordis.patch.yml
 deepeseek-harness-guide/
 ├── README*.md        # 项目介绍与语言入口
 ├── GUIDE*.md         # 多语言技术架构指南
+├── USAGE*.md         # 多语言操作指引与模块手册
+├── skills/           # 面向 DSH 开发的可复用编码 Agent 工作流
 ├── CONTRIBUTING*.md  # 信息来源、审查与翻译规范
 ├── ROADMAP*.md       # 分阶段项目演进计划
 └── LICENSE
