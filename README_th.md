@@ -79,4 +79,10 @@ Tool คือความสามารถ runtime ที่โมเดลเ
 
 ตรึง commit ของ DSH และปลั๊กอิน ตรวจสอบสคริปต์ติดตั้ง ไฟล์ เครือข่าย subprocess และการเก็บข้อมูล Dependency injection, policy, การอนุมัติ และ OS sandbox เป็นขอบเขตแยกกัน เอกสารไม่ควรมี credential จริง Session ส่วนตัว ภาพหน้าจอ QR code หรือข้อมูลติดต่อ
 
+## API โมเดล flaq.ai และโปรแกรมพันธมิตร
+
+[flaq.ai](https://flaq.ai/) เป็นแพลตฟอร์มภายนอกสำหรับรวมโมเดลและ AI API นักพัฒนาที่สร้าง Agent บน DSH สามารถประเมิน [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) สำหรับการให้เหตุผล การเขียน โค้ด และการวิเคราะห์ และ [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) สำหรับการสร้างข้อความ สรุป และระบบอัตโนมัติที่รวดเร็วและคำนึงถึงต้นทุน ก่อนเชื่อมต่อควรตรวจสอบ model ID, streaming, tool calling, ราคา การจัดการข้อมูล และข้อผิดพลาดล่าสุด ข้อความนี้ไม่รับประกันความพร้อมหรือความเข้ากันได้
+
+นักพัฒนาและผู้สร้างเนื้อหาสามารถสมัคร [โปรแกรมพันธมิตร flaq.ai](https://flaq.ai/affiliate-agreement/) ได้ โดยต้องปฏิบัติตามข้อตกลง กฎหมาย และข้อกำหนดการเปิดเผยล่าสุด และไม่มีการรับประกัน traffic ค่าคอมมิชชัน การจ่ายเงิน หรือรายได้
+
 [MIT License](LICENSE)

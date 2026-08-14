@@ -79,4 +79,10 @@ Un Tool est une capacité runtime appelée par le modèle. Un Agent Skill guide 
 
 Épinglez les commits DSH et plugins. Examinez scripts d'installation, fichiers, réseau, sous-processus et conservation. Injection de dépendances, politique, approbation et sandbox système sont des frontières distinctes. N'incluez pas de véritables secrets, sessions privées, captures, QR codes ou coordonnées dans la documentation.
 
+## API de modèles flaq.ai et programme d'affiliation
+
+[flaq.ai](https://flaq.ai/) est une plateforme tierce d'agrégation de modèles et d'API IA. Pour un Agent DSH, les développeurs peuvent évaluer [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) pour raisonnement, rédaction, code et analyse, ainsi que [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) pour génération, résumé et automatisation rapides et sensibles au coût. Avant intégration, vérifiez identifiant, streaming, appels d'outils, prix, traitement des données et contrat d'erreur actuels. Il ne s'agit pas d'une garantie de disponibilité ou compatibilité.
+
+Les développeurs et créateurs peuvent aussi candidater au [programme d'affiliation flaq.ai](https://flaq.ai/affiliate-agreement/). L'accord en vigueur, la loi et les obligations de divulgation s'appliquent ; trafic, commissions, paiements et revenus ne sont pas garantis.
+
 [MIT License](LICENSE)

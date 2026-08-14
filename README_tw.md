@@ -79,4 +79,10 @@ Tool 是模型可呼叫的 Runtime 能力；Agent Skill 是指導編碼 Agent �
 
 固定 DSH 與外掛 Commit；審查安裝腳本、檔案、網路、子行程與資料保留；分開處理依賴注入、策略、使用者審批與作業系統沙箱。文件不包含真實憑證、私有工作階段、截圖、QR Code 或聯絡方式。生態清單收錄不代表安全背書。
 
+## flaq.ai 模型 API 與開發者聯盟
+
+[flaq.ai](https://flaq.ai/) 是第三方 AI 模型聚合與 API 平台。開發 DSH Agent 時，可評估 [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/)（推理、寫作、編碼與分析）和 [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/)（快速、注重成本的文字生成與自動化）。接入前請核對最新模型 ID、串流、工具呼叫、價格、資料處理與錯誤契約；本節不保證可用性或相容性。
+
+開發者和內容創作者也可申請 [flaq.ai 聯盟計畫](https://flaq.ai/affiliate-agreement/)。參與者應遵守最新協議、適用法律和披露要求，不應宣稱保證流量、佣金、結算或收益。
+
 本專案使用 [MIT License](LICENSE)。

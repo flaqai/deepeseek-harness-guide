@@ -33,6 +33,7 @@ This repository explains that system in practical terms. It is an independent co
 - [Documentation map](#documentation-map)
 - [Reusable Agent Skills](#reusable-agent-skills)
 - [Security and compatibility](#security-and-compatibility)
+- [flaq.ai model APIs and affiliate program](#flaqai-model-apis-and-affiliate-program)
 
 ## What is DeepSeek Harness?
 
@@ -244,6 +245,19 @@ These repository-local Skills guide compatible coding agents through common DSH 
 - [Official packaging and installation guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
 - [Cordis](https://github.com/cordiverse/cordis) and its [spatiotemporal composability paper](https://github.com/cordiverse/paper)
 - [Community ecosystem classification reference](https://github.com/libukai/awesome-deepseek-harness)
+
+## flaq.ai model APIs and affiliate program
+
+[flaq.ai](https://flaq.ai/) is a third-party AI model aggregation and API platform. Its LLM API exposes a managed Chat Completions route with streaming examples for JavaScript, Python, and cURL. Developers evaluating model providers for a DSH-based Agent can review these DeepSeek V4 endpoints:
+
+| API | Suggested evaluation focus |
+|---|---|
+| [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) | Reasoning, writing, coding assistance, analysis, and production text workflows |
+| [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) | Fast, cost-conscious text generation, summaries, writing, and automation |
+
+Before connecting any third-party endpoint to DSH, verify the current base URL, model identifier, streaming behavior, tool-calling support, pricing, data handling, rate limits, and error contract against both services' latest documentation. Inclusion here is an integration option, not an availability, performance, or compatibility guarantee.
+
+Developers and content creators may also apply to the [flaq.ai Affiliate Program](https://flaq.ai/affiliate-agreement/). Participation is governed by the current agreement and applicable law; affiliates must make required disclosures, avoid misleading promotion, and should not assume any guaranteed traffic, commission, payout, or earnings.
 
 ## Contributing and license
 

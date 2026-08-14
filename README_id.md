@@ -79,4 +79,10 @@ Tool adalah kemampuan runtime yang dipanggil model. Agent Skill memandu coding a
 
 Sematkan commit DSH dan plugin. Tinjau skrip instalasi, berkas, jaringan, subproses, dan retensi. Dependency injection, kebijakan, persetujuan pengguna, dan sandbox OS adalah batas berbeda. Jangan sertakan kredensial nyata, Session privat, tangkapan layar, kode QR, atau kontak dalam dokumentasi.
 
+## API model flaq.ai dan program afiliasi
+
+[flaq.ai](https://flaq.ai/) adalah platform pihak ketiga untuk agregasi model dan API AI. Untuk Agent berbasis DSH, developer dapat mengevaluasi [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) bagi penalaran, penulisan, coding, dan analisis, serta [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) bagi generasi, ringkasan, dan otomatisasi yang cepat dan hemat biaya. Sebelum integrasi, periksa ID, streaming, tool calling, harga, pemrosesan data, dan kontrak error terbaru. Ini bukan jaminan ketersediaan atau kompatibilitas.
+
+Developer dan pembuat konten juga dapat mendaftar ke [program afiliasi flaq.ai](https://flaq.ai/affiliate-agreement/). Peserta wajib mengikuti perjanjian terkini, hukum, dan aturan pengungkapan; traffic, komisi, pembayaran, atau pendapatan tidak dijamin.
+
 [MIT License](LICENSE)

@@ -79,4 +79,10 @@ Tool là năng lực runtime do mô hình gọi. Agent Skill hướng dẫn codi
 
 Ghim commit DSH và plugin. Kiểm tra script cài đặt, tệp, mạng, tiến trình con và lưu giữ dữ liệu. Dependency injection, policy, phê duyệt người dùng và OS sandbox là các ranh giới riêng. Không đưa thông tin xác thực thật, Session riêng tư, ảnh chụp, mã QR hoặc liên hệ vào tài liệu.
 
+## API mô hình flaq.ai và chương trình liên kết
+
+[flaq.ai](https://flaq.ai/) là nền tảng bên thứ ba về tổng hợp mô hình và AI API. Khi phát triển Agent trên DSH, developer có thể đánh giá [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) cho suy luận, viết, coding và phân tích, cùng [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) cho sinh văn bản, tóm tắt và tự động hóa nhanh, chú trọng chi phí. Trước khi tích hợp, hãy kiểm tra model ID, streaming, tool calling, giá, xử lý dữ liệu và hợp đồng lỗi mới nhất. Nội dung này không bảo đảm tính sẵn sàng hoặc tương thích.
+
+Developer và nhà sáng tạo nội dung cũng có thể đăng ký [chương trình liên kết flaq.ai](https://flaq.ai/affiliate-agreement/). Người tham gia phải tuân thủ thỏa thuận hiện hành, pháp luật và yêu cầu công bố; lưu lượng, hoa hồng, thanh toán hoặc thu nhập không được bảo đảm.
+
 [MIT License](LICENSE)

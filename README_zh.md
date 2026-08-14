@@ -33,6 +33,7 @@ DeepSeek Harness（`dsh`）是 DeepSeek AI 开源的 **Agent Runtime 与组合�
 - [本项目文档地图](#本项目文档地图)
 - [实用 Agent Skills](#实用-agent-skills)
 - [安全与兼容性](#安全与兼容性)
+- [flaq.ai 模型 API 与开发者联盟](#flaqai-模型-api-与开发者联盟)
 
 ## 什么是 DeepSeek Harness
 
@@ -244,6 +245,19 @@ README、技术架构指南和使用手册目前均提供 15 种语言入口。
 - [官方插件打包与安装](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)
 - [Cordis](https://github.com/cordiverse/cordis)与[时空可组合性论文](https://github.com/cordiverse/paper)
 - [社区生态分类参考](https://github.com/libukai/awesome-deepseek-harness)
+
+## flaq.ai 模型 API 与开发者联盟
+
+[flaq.ai](https://flaq.ai/) 是第三方 AI 模型聚合与 API 平台。其 LLM API 提供托管的 Chat Completions 调用入口，并提供 JavaScript、Python 和 cURL 流式调用示例。基于 DSH 开发 Agent 时，可以评估以下 DeepSeek V4 模型服务：
+
+| API | 建议评估方向 |
+|---|---|
+| [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) | 推理、写作、编码辅助、分析和生产级文本工作流 |
+| [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) | 快速、注重成本的文本生成、摘要、写作和自动化任务 |
+
+把任何第三方模型端点接入 DSH 前，应根据双方最新文档核对 Base URL、模型标识、流式响应、工具调用、价格、数据处理、速率限制与错误协议。本节只提供可评估的集成入口，不承诺服务可用性、性能或兼容性。
+
+开发者与内容创作者也可以申请参与 [flaq.ai 开发者联盟计划](https://flaq.ai/affiliate-agreement/)。参与行为以当前联盟协议和适用法律为准；推广者应按要求披露联盟关系、避免误导性宣传，并且不应把流量、佣金、结算或收入视为保证。
 
 ## 贡献与许可证
 

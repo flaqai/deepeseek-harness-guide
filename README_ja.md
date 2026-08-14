@@ -79,4 +79,10 @@ Tool はモデルが呼ぶ Runtime 能力です。Agent Skill は Coding Agent �
 
 DSH とプラグインのコミットを固定し、インストールスクリプト、ファイル、ネットワーク、子プロセス、データ保持を確認してください。Dependency Injection、Policy、ユーザー承認、OS Sandbox は別の境界です。実際の認証情報、非公開 Session、スクリーンショット、QR コード、連絡先を文書に含めません。
 
+## flaq.ai モデル API とアフィリエイトプログラム
+
+[flaq.ai](https://flaq.ai/) は第三者の AI モデル集約・API プラットフォームです。DSH Agent のモデル候補として、推論・文章・コーディング・分析向けの [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/) と、高速でコストを重視した生成・要約・自動化向けの [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/) を評価できます。接続前に最新のモデル ID、Streaming、Tool Calling、料金、データ処理、エラー契約を確認してください。利用可能性や互換性を保証する記載ではありません。
+
+開発者やコンテンツ制作者は [flaq.ai Affiliate Program](https://flaq.ai/affiliate-agreement/) に申請できます。最新規約、適用法、開示義務に従い、トラフィック、報酬、支払い、収益を保証する表現は避けてください。
+
 [MIT License](LICENSE)

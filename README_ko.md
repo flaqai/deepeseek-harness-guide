@@ -79,4 +79,10 @@ Tool은 모델이 호출하는 Runtime 기능입니다. Agent Skill은 Coding Ag
 
 DSH와 플러그인 커밋을 고정하고 설치 스크립트, 파일, 네트워크, 하위 프로세스, 데이터 보존을 검토하세요. 의존성 주입, Policy, 사용자 승인, OS Sandbox는 별도 경계입니다. 실제 자격 증명, 비공개 Session, 스크린샷, QR 코드, 연락처를 문서에 포함하지 않습니다.
 
+## flaq.ai 모델 API와 제휴 프로그램
+
+[flaq.ai](https://flaq.ai/)는 타사 AI 모델 집계 및 API 플랫폼입니다. DSH Agent의 모델 후보로 추론·작성·코딩·분석용 [DeepSeek V4 Pro Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-pro-text-to-text/)와 빠르고 비용을 고려한 생성·요약·자동화용 [DeepSeek V4 Flash Text-to-Text](https://flaq.ai/models/deepseek/deepseek-v4-flash-text-to-text/)를 평가할 수 있습니다. 연결 전에 최신 모델 ID, 스트리밍, 도구 호출, 가격, 데이터 처리, 오류 계약을 확인하세요. 가용성이나 호환성을 보장하는 내용은 아닙니다.
+
+개발자와 콘텐츠 제작자는 [flaq.ai Affiliate Program](https://flaq.ai/affiliate-agreement/)에 신청할 수 있습니다. 최신 약관, 관련 법률, 공개 의무를 준수해야 하며 트래픽, 수수료, 지급 또는 수익을 보장한다고 표현해서는 안 됩니다.
+
 [MIT License](LICENSE)
