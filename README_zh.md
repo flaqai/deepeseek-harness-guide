@@ -121,7 +121,7 @@ Context、Service、Fiber、Effect、Event、Session、Turn/Step、缓存和安�
 
 ### 启动官方 Web UI
 
-安装 Node.js 22.19 或 24+ 版本（部署前请再次核对[官方开发指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.zh.md)），然后运行：
+安装 Node.js 24.9 或更高版本。DeepSeek Harness 的 0.2.2 线（自 `0.2.2-alpha.2` 起）要求 `engines.node >=24.9.0`，不再支持 Node 22（部署前请再次核对[官方开发指南](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.zh.md)），然后运行：
 
 ```bash
 npx @deepseek-ai/dsh web
