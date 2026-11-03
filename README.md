@@ -121,7 +121,7 @@ For Context, Service, Fiber, Effect, Event, Session, Turn/Step, caching, and sec
 
 ### Run the official Web UI
 
-Install Node.js 22.19 or a 24+ release (and re-check the [official development guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.md) before deployment), then run:
+Install Node.js 24.9 or newer. The DeepSeek Harness 0.2.2 line (from `0.2.2-alpha.2`) declares `engines.node >=24.9.0` and no longer supports Node 22 (re-check the [official development guide](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/development.md) before deployment), then run:
 
 ```bash
 npx @deepseek-ai/dsh web
